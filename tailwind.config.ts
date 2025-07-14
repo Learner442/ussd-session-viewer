@@ -61,6 +61,18 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				status: {
+					active: 'hsl(var(--status-active))',
+					'active-foreground': 'hsl(var(--status-active-foreground))',
+					completed: 'hsl(var(--status-completed))',
+					'completed-foreground': 'hsl(var(--status-completed-foreground))',
+					failed: 'hsl(var(--status-failed))',
+					'failed-foreground': 'hsl(var(--status-failed-foreground))',
+					pending: 'hsl(var(--status-pending))',
+					'pending-foreground': 'hsl(var(--status-pending-foreground))',
+					timeout: 'hsl(var(--status-timeout))',
+					'timeout-foreground': 'hsl(var(--status-timeout-foreground))'
 				}
 			},
 			borderRadius: {

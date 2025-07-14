@@ -15,6 +15,16 @@ const badgeVariants = cva(
         destructive:
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
+        active:
+          "border-transparent bg-status-active text-status-active-foreground hover:bg-status-active/80",
+        completed:
+          "border-transparent bg-status-completed text-status-completed-foreground hover:bg-status-completed/80",
+        failed:
+          "border-transparent bg-status-failed text-status-failed-foreground hover:bg-status-failed/80",
+        pending:
+          "border-transparent bg-status-pending text-status-pending-foreground hover:bg-status-pending/80",
+        timeout:
+          "border-transparent bg-status-timeout text-status-timeout-foreground hover:bg-status-timeout/80",
       },
     },
     defaultVariants: {

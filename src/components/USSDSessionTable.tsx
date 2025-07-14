@@ -5,20 +5,27 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, RefreshCw, Signal } from "lucide-react";
+import { Search, RefreshCw, Signal, MessageSquare, DollarSign, TrendingUp } from "lucide-react";
 
 type USSDStatus = "active" | "completed" | "failed" | "pending" | "timeout";
+type USSDService = "Send Money" | "PayBill" | "Buy Airtime" | "Regional Transfer" | "Forex Exchange" | "Electricity Payment";
 
 interface USSDSession {
   id: string;
   phoneNumber: string;
   serviceCode: string;
+  service: USSDService;
   status: USSDStatus;
   startTime: Date;
   endTime?: Date;
   duration: number;
   requestCount: number;
   lastRequest: string;
+  sessionCost: number;
+  revenue: number;
+  smsStatus?: "sent" | "pending" | "failed";
+  smsCost?: number;
+  smsDeliveredAt?: Date;
 }
 
 // Mock data for USSD sessions
@@ -27,65 +34,91 @@ const mockSessions: USSDSession[] = [
     id: "USS-001",
     phoneNumber: "+233244123456",
     serviceCode: "*170#",
+    service: "Send Money",
     status: "active",
     startTime: new Date(Date.now() - 45000),
     duration: 45,
     requestCount: 3,
-    lastRequest: "Check Balance"
+    lastRequest: "Enter Amount",
+    sessionCost: 0.05,
+    revenue: 0,
+    smsStatus: "pending"
   },
   {
     id: "USS-002", 
     phoneNumber: "+233245678901",
     serviceCode: "*150#",
+    service: "PayBill",
     status: "completed",
     startTime: new Date(Date.now() - 180000),
     endTime: new Date(Date.now() - 60000),
     duration: 120,
     requestCount: 5,
-    lastRequest: "Transfer Money"
+    lastRequest: "Payment Successful",
+    sessionCost: 0.08,
+    revenue: 1.50,
+    smsStatus: "sent",
+    smsCost: 0.02,
+    smsDeliveredAt: new Date(Date.now() - 60000)
   },
   {
     id: "USS-003",
     phoneNumber: "+233256789012",
     serviceCode: "*130#",
+    service: "Buy Airtime",
     status: "failed",
     startTime: new Date(Date.now() - 300000),
     endTime: new Date(Date.now() - 240000),
     duration: 60,
     requestCount: 2,
-    lastRequest: "Buy Airtime"
+    lastRequest: "Transaction Failed",
+    sessionCost: 0.04,
+    revenue: 0,
+    smsStatus: "failed"
   },
   {
     id: "USS-004",
     phoneNumber: "+233267890123",
     serviceCode: "*170#",
+    service: "Regional Transfer",
     status: "pending",
     startTime: new Date(Date.now() - 30000),
     duration: 30,
     requestCount: 1,
-    lastRequest: "Menu Selection"
+    lastRequest: "Select Country",
+    sessionCost: 0.03,
+    revenue: 0
   },
   {
     id: "USS-005",
     phoneNumber: "+233278901234",
     serviceCode: "*140#",
+    service: "Forex Exchange",
     status: "timeout",
     startTime: new Date(Date.now() - 600000),
     endTime: new Date(Date.now() - 300000),
     duration: 300,
     requestCount: 1,
-    lastRequest: "Session Timeout"
+    lastRequest: "Session Timeout",
+    sessionCost: 0.12,
+    revenue: 0
   },
   {
     id: "USS-006",
     phoneNumber: "+233289012345",
     serviceCode: "*150#",
+    service: "Electricity Payment",
     status: "completed",
     startTime: new Date(Date.now() - 900000),
     endTime: new Date(Date.now() - 720000),
     duration: 180,
     requestCount: 6,
-    lastRequest: "Payment Complete"
+    lastRequest: "Payment Complete",
+    sessionCost: 0.10,
+    revenue: 2.25,
+    smsStatus: "sent",
+    smsCost: 0.02,
+    smsDeliveredAt: new Date(Date.now() - 720000)
   }
 ];
 
@@ -137,8 +170,11 @@ export function USSDSessionTable() {
     const active = sessions.filter(s => s.status === "active").length;
     const completed = sessions.filter(s => s.status === "completed").length;
     const failed = sessions.filter(s => s.status === "failed").length;
+    const totalRevenue = sessions.reduce((sum, s) => sum + s.revenue, 0);
+    const totalCosts = sessions.reduce((sum, s) => sum + s.sessionCost + (s.smsCost || 0), 0);
+    const smsDelivered = sessions.filter(s => s.smsStatus === "sent").length;
     
-    return { total, active, completed, failed };
+    return { total, active, completed, failed, totalRevenue, totalCosts, smsDelivered };
   };
 
   const stats = getSessionStats();
@@ -146,7 +182,7 @@ export function USSDSessionTable() {
   return (
     <div className="space-y-6">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Sessions</CardTitle>
@@ -184,6 +220,36 @@ export function USSDSessionTable() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-status-failed">{stats.failed}</div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+            <DollarSign className="h-4 w-4 text-primary" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-primary">${stats.totalRevenue.toFixed(2)}</div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Costs</CardTitle>
+            <TrendingUp className="h-4 w-4 text-destructive" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-destructive">${stats.totalCosts.toFixed(2)}</div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">SMS Delivered</CardTitle>
+            <MessageSquare className="h-4 w-4 text-primary" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-primary">{stats.smsDelivered}</div>
           </CardContent>
         </Card>
       </div>
@@ -232,11 +298,13 @@ export function USSDSessionTable() {
                 <TableRow>
                   <TableHead>Session ID</TableHead>
                   <TableHead>Phone Number</TableHead>
-                  <TableHead>Service Code</TableHead>
+                  <TableHead>Service</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Start Time</TableHead>
                   <TableHead>Duration</TableHead>
-                  <TableHead>Requests</TableHead>
+                  <TableHead>Cost</TableHead>
+                  <TableHead>Revenue</TableHead>
+                  <TableHead>SMS</TableHead>
                   <TableHead>Last Request</TableHead>
                 </TableRow>
               </TableHeader>
@@ -245,7 +313,12 @@ export function USSDSessionTable() {
                   <TableRow key={session.id}>
                     <TableCell className="font-medium">{session.id}</TableCell>
                     <TableCell>{session.phoneNumber}</TableCell>
-                    <TableCell className="font-mono">{session.serviceCode}</TableCell>
+                    <TableCell>
+                      <div className="flex flex-col">
+                        <span className="font-medium">{session.service}</span>
+                        <span className="text-sm text-muted-foreground font-mono">{session.serviceCode}</span>
+                      </div>
+                    </TableCell>
                     <TableCell>
                       <Badge variant={getStatusBadgeVariant(session.status)}>
                         {session.status.toUpperCase()}
@@ -253,7 +326,20 @@ export function USSDSessionTable() {
                     </TableCell>
                     <TableCell>{formatTime(session.startTime)}</TableCell>
                     <TableCell className="font-mono">{formatDuration(session.duration)}</TableCell>
-                    <TableCell>{session.requestCount}</TableCell>
+                    <TableCell className="font-mono text-destructive">${session.sessionCost.toFixed(3)}</TableCell>
+                    <TableCell className="font-mono text-primary">${session.revenue.toFixed(2)}</TableCell>
+                    <TableCell>
+                      <div className="flex flex-col">
+                        {session.smsStatus && (
+                          <Badge variant={session.smsStatus === "sent" ? "completed" : session.smsStatus === "failed" ? "failed" : "pending"} className="text-xs">
+                            {session.smsStatus.toUpperCase()}
+                          </Badge>
+                        )}
+                        {session.smsCost && (
+                          <span className="text-xs text-muted-foreground mt-1">${session.smsCost.toFixed(3)}</span>
+                        )}
+                      </div>
+                    </TableCell>
                     <TableCell className="max-w-48 truncate">{session.lastRequest}</TableCell>
                   </TableRow>
                 ))}

@@ -304,6 +304,7 @@ export function USSDSessionTable() {
                   <TableHead>Duration</TableHead>
                   <TableHead>Cost</TableHead>
                   <TableHead>Revenue</TableHead>
+                  <TableHead>Amount Owed</TableHead>
                   <TableHead>SMS</TableHead>
                   <TableHead>Last Request</TableHead>
                 </TableRow>
@@ -328,6 +329,9 @@ export function USSDSessionTable() {
                     <TableCell className="font-mono">{formatDuration(session.duration)}</TableCell>
                     <TableCell className="font-mono text-destructive">${session.sessionCost.toFixed(3)}</TableCell>
                     <TableCell className="font-mono text-primary">${session.revenue.toFixed(2)}</TableCell>
+                    <TableCell className="font-mono text-destructive">
+                      {session.revenue === 0 ? `$${session.sessionCost.toFixed(3)}` : "$0.000"}
+                    </TableCell>
                     <TableCell>
                       <div className="flex flex-col">
                         {session.smsStatus && (

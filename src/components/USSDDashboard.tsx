@@ -31,6 +31,9 @@ const reportItems = [
   { title: "Cost Analysis", url: "analytics", icon: DollarSign },
   { title: "User Metrics", url: "users", icon: Users },
   { title: "Transactions", url: "transactions", icon: CreditCard },
+];
+
+const configItems = [
   { title: "Rates Configuration", url: "rates-configuration", icon: Settings },
 ];
 
@@ -85,6 +88,25 @@ function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveT
               </SidebarGroupContent>
             </CollapsibleContent>
           </Collapsible>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>Configuration</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {configItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton
+                    onClick={() => setActiveTab(item.url)}
+                    className={activeTab === item.url ? "bg-muted text-primary font-medium" : "hover:bg-muted/50"}
+                  >
+                    <item.icon className="mr-2 h-4 w-4" />
+                    <span>{item.title}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>

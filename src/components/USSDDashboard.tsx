@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, BarChart3, MessageSquare, DollarSign, Users, ChevronDown, ChevronRight, CreditCard } from "lucide-react";
+import { Home, BarChart3, MessageSquare, DollarSign, Users, ChevronDown, ChevronRight, CreditCard, Settings } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -19,6 +19,7 @@ import { SMSManagement } from "./SMSManagement";
 import { CostAnalytics } from "./CostAnalytics";
 import { UserMetrics } from "./UserMetrics";
 import { Transactions } from "./Transactions";
+import { RatesConfiguration } from "./RatesConfiguration";
 
 const homeItems = [
   { title: "Dashboard", url: "home", icon: Home },
@@ -30,6 +31,7 @@ const reportItems = [
   { title: "Cost Analysis", url: "analytics", icon: DollarSign },
   { title: "User Metrics", url: "users", icon: Users },
   { title: "Transactions", url: "transactions", icon: CreditCard },
+  { title: "Rates Configuration", url: "rates-configuration", icon: Settings },
 ];
 
 function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveTab: (tab: string) => void }) {
@@ -106,6 +108,8 @@ export function USSDDashboard() {
         return <UserMetrics />;
       case "transactions":
         return <Transactions />;
+      case "rates-configuration":
+        return <RatesConfiguration />;
       default:
         return <SessionReport />;
     }

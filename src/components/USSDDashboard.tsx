@@ -49,7 +49,7 @@ function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveT
       <SidebarContent>
         {/* Logo Section */}
         <div className="p-4 border-b">
-          <img src={dapayLogo} alt="DAPAY" className="h-12 w-auto" />
+          <img src={dapayLogo} alt="DAPAY" className="h-16 w-auto" />
         </div>
         <SidebarGroup>
           <SidebarGroupLabel>Home</SidebarGroupLabel>

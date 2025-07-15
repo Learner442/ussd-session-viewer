@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { USSDSessionTable } from "./USSDSessionTable";
 import { SMSManagement } from "./SMSManagement";
 import { CostAnalytics } from "./CostAnalytics";
+import { UserMetrics } from "./UserMetrics";
 
 export function USSDDashboard() {
   const [activeTab, setActiveTab] = useState("sessions");
@@ -27,10 +28,11 @@ export function USSDDashboard() {
 
         {/* Navigation Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="sessions">USSD Sessions</TabsTrigger>
             <TabsTrigger value="sms">SMS Management</TabsTrigger>
             <TabsTrigger value="analytics">Cost Analytics</TabsTrigger>
+            <TabsTrigger value="users">User Metrics</TabsTrigger>
           </TabsList>
           
           <TabsContent value="sessions">
@@ -43,6 +45,10 @@ export function USSDDashboard() {
           
           <TabsContent value="analytics">
             <CostAnalytics />
+          </TabsContent>
+          
+          <TabsContent value="users">
+            <UserMetrics />
           </TabsContent>
         </Tabs>
       </div>

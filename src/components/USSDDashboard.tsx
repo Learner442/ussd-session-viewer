@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Home, BarChart3, MessageSquare, DollarSign, Users, ChevronDown, ChevronRight, CreditCard, Settings, DollarSign as FXIcon } from "lucide-react";
+import dapayLogo from "@/assets/dapay-logo.png";
 import {
   Sidebar,
   SidebarContent,
@@ -46,6 +47,11 @@ function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveT
   return (
     <Sidebar className="w-64">
       <SidebarContent>
+        {/* Logo Section */}
+        <div className="p-4 border-b">
+          <img src={dapayLogo} alt="DAPAY" className="h-8 w-auto" />
+        </div>
+
         <SidebarGroup>
           <SidebarGroupLabel>Home</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -162,9 +168,9 @@ export function USSDDashboard() {
             <div className="flex items-center space-x-4">
               <SidebarTrigger />
               <div>
-                <h1 className="text-2xl font-bold text-foreground">USSD Management</h1>
+                <h1 className="text-2xl font-bold text-foreground">DAPAY Dashboard</h1>
                 <p className="text-sm text-muted-foreground">
-                  Monitor sessions, SMS delivery, and cost analytics
+                  Digital Payment Management Platform
                 </p>
               </div>
             </div>

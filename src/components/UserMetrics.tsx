@@ -24,7 +24,7 @@ const mockUserData = [
     phone: "+254721123456",
     firstSeen: "2024-01-15",
     lastSeen: "2024-12-15",
-    sessions: 870,
+    sessions: 871,
     transactions: 425,
     smseSent: 1044,
     servicesUsed: 6,

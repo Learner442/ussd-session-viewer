@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, BarChart3, MessageSquare, DollarSign, Users } from "lucide-react";
+import { Home, BarChart3, MessageSquare, DollarSign, Users, ChevronDown, ChevronRight } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -12,6 +12,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { SessionReport } from "./SessionReport";
 import { USSDSessionTable } from "./USSDSessionTable";
 import { SMSManagement } from "./SMSManagement";
@@ -30,6 +31,8 @@ const reportItems = [
 ];
 
 function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveTab: (tab: string) => void }) {
+  const [reportsOpen, setReportsOpen] = useState(true);
+
   return (
     <Sidebar className="w-64">
       <SidebarContent>
@@ -53,22 +56,31 @@ function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveT
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Reports</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {reportItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    onClick={() => setActiveTab(item.url)}
-                    className={activeTab === item.url ? "bg-muted text-primary font-medium" : "hover:bg-muted/50"}
-                  >
-                    <item.icon className="mr-2 h-4 w-4" />
-                    <span>{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          <Collapsible open={reportsOpen} onOpenChange={setReportsOpen}>
+            <CollapsibleTrigger asChild>
+              <SidebarGroupLabel className="cursor-pointer flex items-center justify-between hover:bg-muted/50 rounded-md">
+                <span>Reports</span>
+                {reportsOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+              </SidebarGroupLabel>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {reportItems.map((item) => (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        onClick={() => setActiveTab(item.url)}
+                        className={activeTab === item.url ? "bg-muted text-primary font-medium" : "hover:bg-muted/50"}
+                      >
+                        <item.icon className="mr-2 h-4 w-4" />
+                        <span>{item.title}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </CollapsibleContent>
+          </Collapsible>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>

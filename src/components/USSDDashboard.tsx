@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SessionReport } from "./SessionReport";
 import { USSDSessionTable } from "./USSDSessionTable";
 import { SMSManagement } from "./SMSManagement";
 import { CostAnalytics } from "./CostAnalytics";
 import { UserMetrics } from "./UserMetrics";
 
 export function USSDDashboard() {
-  const [activeTab, setActiveTab] = useState("sessions");
+  const [activeTab, setActiveTab] = useState("home");
 
   return (
     <div className="min-h-screen bg-background">
@@ -28,12 +29,17 @@ export function USSDDashboard() {
 
         {/* Navigation Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="home">Home</TabsTrigger>
             <TabsTrigger value="sessions">USSD Sessions</TabsTrigger>
             <TabsTrigger value="sms">SMS Management</TabsTrigger>
             <TabsTrigger value="analytics">Cost Analytics</TabsTrigger>
             <TabsTrigger value="users">User Metrics</TabsTrigger>
           </TabsList>
+          
+          <TabsContent value="home">
+            <SessionReport />
+          </TabsContent>
           
           <TabsContent value="sessions">
             <USSDSessionTable />

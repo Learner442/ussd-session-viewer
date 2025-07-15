@@ -30,7 +30,7 @@ const mockUserData = [
     servicesUsed: 6,
     completedSessions: 847,
     droppedSessions: 23,
-    walletBalance: 15240.50,
+    sessionCost: 0.15,
     totalTransactionValue: 485000.00,
     revenueGenerated: 2425.00,
     lifetimeValue: 200.00,
@@ -47,7 +47,7 @@ const mockUserData = [
     servicesUsed: 4,
     completedSessions: 192,
     droppedSessions: 8,
-    walletBalance: 2850.75,
+    sessionCost: 0.15,
     totalTransactionValue: 45000.00,
     revenueGenerated: 225.00,
     lifetimeValue: 5.00,
@@ -64,7 +64,7 @@ const mockUserData = [
     servicesUsed: 2,
     completedSessions: 15,
     droppedSessions: 12,
-    walletBalance: 125.00,
+    sessionCost: 0.15,
     totalTransactionValue: 2500.00,
     revenueGenerated: 12.50,
     lifetimeValue: 0.83,
@@ -97,7 +97,7 @@ export function UserMetrics() {
   const totalUsers = filteredUsers.length;
   const totalRevenue = filteredUsers.reduce((sum, user) => sum + user.revenueGenerated, 0);
   const avgLifetimeValue = filteredUsers.reduce((sum, user) => sum + user.lifetimeValue, 0) / totalUsers;
-  const totalWalletBalance = filteredUsers.reduce((sum, user) => sum + user.walletBalance, 0);
+  const totalAmountOwed = filteredUsers.reduce((sum, user) => sum + (user.droppedSessions * user.sessionCost), 0);
   const totalTransactions = filteredUsers.reduce((sum, user) => sum + user.transactions, 0);
 
   return (
@@ -139,12 +139,12 @@ export function UserMetrics() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Wallet Balance</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Amount Owed</CardTitle>
             <Wallet className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(totalWalletBalance)}</div>
-            <p className="text-xs text-muted-foreground">In user wallets</p>
+            <div className="text-2xl font-bold">{formatCurrency(totalAmountOwed)}</div>
+            <p className="text-xs text-muted-foreground">From dropped sessions</p>
           </CardContent>
         </Card>
       </div>
@@ -193,10 +193,13 @@ export function UserMetrics() {
                   <TableHead>Transactions</TableHead>
                   <TableHead>SMS Sent</TableHead>
                   <TableHead>Services Used</TableHead>
+                  <TableHead>Completed Sessions</TableHead>
+                  <TableHead>Dropped Sessions</TableHead>
                   <TableHead>Completion Rate</TableHead>
-                  <TableHead>Wallet Balance</TableHead>
+                  <TableHead>Amount Owed</TableHead>
                   <TableHead>Lifetime Value</TableHead>
-                  <TableHead>First/Last Seen</TableHead>
+                  <TableHead>First Seen</TableHead>
+                  <TableHead>Last Seen</TableHead>
                   <TableHead>Tags</TableHead>
                 </TableRow>
               </TableHeader>
@@ -209,23 +212,15 @@ export function UserMetrics() {
                     <TableCell className="font-mono">{user.transactions.toLocaleString()}</TableCell>
                     <TableCell className="font-mono">{user.smseSent.toLocaleString()}</TableCell>
                     <TableCell className="font-mono">{user.servicesUsed}</TableCell>
-                    <TableCell>
-                      <div className="flex flex-col">
-                        <span className="text-green-600 font-mono">{user.completedSessions} completed</span>
-                        <span className="text-red-600 font-mono text-xs">{user.droppedSessions} dropped</span>
-                        <span className="text-muted-foreground text-xs">
-                          {((user.completedSessions / (user.completedSessions + user.droppedSessions)) * 100).toFixed(1)}%
-                        </span>
-                      </div>
+                    <TableCell className="text-green-600 font-mono">{user.completedSessions.toLocaleString()}</TableCell>
+                    <TableCell className="text-red-600 font-mono">{user.droppedSessions.toLocaleString()}</TableCell>
+                    <TableCell className="font-mono">
+                      {((user.completedSessions / (user.completedSessions + user.droppedSessions)) * 100).toFixed(1)}%
                     </TableCell>
-                    <TableCell className="font-mono text-primary">{formatCurrency(user.walletBalance)}</TableCell>
+                    <TableCell className="font-mono text-red-600">{formatCurrency(user.droppedSessions * user.sessionCost)}</TableCell>
                     <TableCell className="font-mono">{formatCurrency(user.lifetimeValue)}</TableCell>
-                    <TableCell>
-                      <div className="flex flex-col text-xs">
-                        <span>First: {formatDate(user.firstSeen)}</span>
-                        <span className="text-muted-foreground">Last: {formatDate(user.lastSeen)}</span>
-                      </div>
-                    </TableCell>
+                    <TableCell className="text-xs">{formatDate(user.firstSeen)}</TableCell>
+                    <TableCell className="text-xs text-muted-foreground">{formatDate(user.lastSeen)}</TableCell>
                     <TableCell>
                       <div className="flex flex-wrap gap-1">
                         {user.tags.map((tag) => (

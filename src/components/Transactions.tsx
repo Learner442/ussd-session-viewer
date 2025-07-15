@@ -130,10 +130,10 @@ export function Transactions() {
     const matchesSearch = transaction.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          transaction.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          transaction.service.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesUser = !selectedUser || transaction.user === selectedUser;
-    const matchesRegion = !selectedRegion || transaction.region === selectedRegion;
-    const matchesService = !selectedService || transaction.service === selectedService;
-    const matchesStatus = !selectedStatus || transaction.status === selectedStatus;
+    const matchesUser = !selectedUser || selectedUser === "all" || transaction.user === selectedUser;
+    const matchesRegion = !selectedRegion || selectedRegion === "all" || transaction.region === selectedRegion;
+    const matchesService = !selectedService || selectedService === "all" || transaction.service === selectedService;
+    const matchesStatus = !selectedStatus || selectedStatus === "all" || transaction.status === selectedStatus;
     
     return matchesSearch && matchesUser && matchesRegion && matchesService && matchesStatus;
   });
@@ -301,7 +301,7 @@ export function Transactions() {
                       <SelectValue placeholder="Select region" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border z-50">
-                      <SelectItem value="">All Regions</SelectItem>
+                      <SelectItem value="all">All Regions</SelectItem>
                       <SelectItem value="Lagos">Lagos</SelectItem>
                       <SelectItem value="Abuja">Abuja</SelectItem>
                       <SelectItem value="Kano">Kano</SelectItem>
@@ -318,7 +318,7 @@ export function Transactions() {
                       <SelectValue placeholder="Select service" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border z-50">
-                      <SelectItem value="">All Services</SelectItem>
+                      <SelectItem value="all">All Services</SelectItem>
                       <SelectItem value="Airtime Purchase">Airtime Purchase</SelectItem>
                       <SelectItem value="Bill Payment">Bill Payment</SelectItem>
                       <SelectItem value="Data Bundle">Data Bundle</SelectItem>
@@ -334,7 +334,7 @@ export function Transactions() {
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
                     <SelectContent className="bg-background border z-50">
-                      <SelectItem value="">All Status</SelectItem>
+                      <SelectItem value="all">All Status</SelectItem>
                       <SelectItem value="Success">Success</SelectItem>
                       <SelectItem value="Failed">Failed</SelectItem>
                       <SelectItem value="Pending">Pending</SelectItem>

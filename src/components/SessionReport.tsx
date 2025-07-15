@@ -286,12 +286,124 @@ export function SessionReport() {
         </Card>
       </div>
 
-      {/* Pagination */}
-      <div className="flex justify-center items-center gap-2">
-        <Button variant="outline" size="sm">‹</Button>
-        <span className="text-sm text-muted-foreground">1 / 8</span>
-        <Button variant="outline" size="sm">›</Button>
-      </div>
+      {/* Top Services by Completion Rate */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Top Services by Completion Rate</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-left p-2 font-medium text-muted-foreground">SERVICE</th>
+                  <th className="text-left p-2 font-medium text-muted-foreground">TOTAL SESSIONS</th>
+                  <th className="text-left p-2 font-medium text-muted-foreground">COMPLETED</th>
+                  <th className="text-left p-2 font-medium text-muted-foreground">COMPLETION RATE</th>
+                  <th className="text-left p-2 font-medium text-muted-foreground">REVENUE</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b">
+                  <td className="p-2">Electricity Purchase</td>
+                  <td className="p-2">8,450</td>
+                  <td className="p-2">7,892</td>
+                  <td className="p-2">93.4%</td>
+                  <td className="p-2">$1,945.60</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="p-2">Bill Payment</td>
+                  <td className="p-2">6,230</td>
+                  <td className="p-2">5,567</td>
+                  <td className="p-2">89.4%</td>
+                  <td className="p-2">$1,432.90</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="p-2">Mobile Money Transfer</td>
+                  <td className="p-2">4,890</td>
+                  <td className="p-2">4,123</td>
+                  <td className="p-2">84.3%</td>
+                  <td className="p-2">$1,124.70</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="p-2">Balance Check</td>
+                  <td className="p-2">3,456</td>
+                  <td className="p-2">2,789</td>
+                  <td className="p-2">80.7%</td>
+                  <td className="p-2">$794.88</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="p-2">Merchant Registration</td>
+                  <td className="p-2">1,541</td>
+                  <td className="p-2">1,156</td>
+                  <td className="p-2">75.0%</td>
+                  <td className="p-2">$354.43</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Regional Performance */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Regional Performance</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="space-y-2">
+              <h4 className="font-medium">Kinshasa</h4>
+              <p className="text-2xl font-bold">9,234</p>
+              <p className="text-sm text-muted-foreground">Total Sessions</p>
+              <p className="text-sm text-muted-foreground">Success Rate: 82.1%</p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-medium">North Kivu</h4>
+              <p className="text-2xl font-bold">7,891</p>
+              <p className="text-sm text-muted-foreground">Total Sessions</p>
+              <p className="text-sm text-muted-foreground">Success Rate: 79.4%</p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-medium">Katanga</h4>
+              <p className="text-2xl font-bold">5,442</p>
+              <p className="text-sm text-muted-foreground">Total Sessions</p>
+              <p className="text-sm text-muted-foreground">Success Rate: 76.8%</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Export Options */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Export Options</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" size="sm">
+              <Download className="h-4 w-4 mr-2" />
+              PDF
+            </Button>
+            <Button variant="outline" size="sm">
+              <Download className="h-4 w-4 mr-2" />
+              Excel
+            </Button>
+            <Button variant="outline" size="sm">
+              <Download className="h-4 w-4 mr-2" />
+              CSV
+            </Button>
+            <Button variant="outline" size="sm">
+              <Download className="h-4 w-4 mr-2" />
+              Email Summary
+            </Button>
+            <Button variant="outline" size="sm">
+              <Download className="h-4 w-4 mr-2" />
+              Dashboard Export
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, BarChart3, MessageSquare, DollarSign, Users, ChevronDown, ChevronRight, CreditCard, Settings } from "lucide-react";
+import { Home, BarChart3, MessageSquare, DollarSign, Users, ChevronDown, ChevronRight, CreditCard, Settings, DollarSign as FXIcon } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -20,6 +20,7 @@ import { CostAnalytics } from "./CostAnalytics";
 import { UserMetrics } from "./UserMetrics";
 import { Transactions } from "./Transactions";
 import { RatesConfiguration } from "./RatesConfiguration";
+import { FXConfiguration } from "./FXConfiguration";
 
 const homeItems = [
   { title: "Dashboard", url: "home", icon: Home },
@@ -35,10 +36,12 @@ const reportItems = [
 
 const configItems = [
   { title: "Rates Configuration", url: "rates-configuration", icon: Settings },
+  { title: "FX Configuration", url: "fx-configuration", icon: FXIcon },
 ];
 
 function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveTab: (tab: string) => void }) {
   const [reportsOpen, setReportsOpen] = useState(true);
+  const [configOpen, setConfigOpen] = useState(true);
 
   return (
     <Sidebar className="w-64">
@@ -91,22 +94,31 @@ function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveT
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Configuration</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {configItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    onClick={() => setActiveTab(item.url)}
-                    className={activeTab === item.url ? "bg-muted text-primary font-medium" : "hover:bg-muted/50"}
-                  >
-                    <item.icon className="mr-2 h-4 w-4" />
-                    <span>{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          <Collapsible open={configOpen} onOpenChange={setConfigOpen}>
+            <CollapsibleTrigger asChild>
+              <SidebarGroupLabel className="cursor-pointer flex items-center justify-between hover:bg-muted/50 rounded-md">
+                <span>Configuration</span>
+                {configOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+              </SidebarGroupLabel>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {configItems.map((item) => (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        onClick={() => setActiveTab(item.url)}
+                        className={activeTab === item.url ? "bg-muted text-primary font-medium" : "hover:bg-muted/50"}
+                      >
+                        <item.icon className="mr-2 h-4 w-4" />
+                        <span>{item.title}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </CollapsibleContent>
+          </Collapsible>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
@@ -132,6 +144,8 @@ export function USSDDashboard() {
         return <Transactions />;
       case "rates-configuration":
         return <RatesConfiguration />;
+      case "fx-configuration":
+        return <FXConfiguration />;
       default:
         return <SessionReport />;
     }

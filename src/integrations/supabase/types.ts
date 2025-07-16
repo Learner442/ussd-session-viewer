@@ -14,16 +14,139 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      agent_services: {
+        Row: {
+          agent_id: string
+          created_at: string
+          id: string
+          is_enabled: boolean | null
+          rate: number
+          rate_type: string
+          service_type: string
+        }
+        Insert: {
+          agent_id: string
+          created_at?: string
+          id?: string
+          is_enabled?: boolean | null
+          rate: number
+          rate_type: string
+          service_type: string
+        }
+        Update: {
+          agent_id?: string
+          created_at?: string
+          id?: string
+          is_enabled?: boolean | null
+          rate?: number
+          rate_type?: string
+          service_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_services_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agent_wallets: {
+        Row: {
+          agent_id: string
+          balance: number | null
+          created_at: string
+          id: string
+          last_transaction_at: string | null
+          total_transactions: number | null
+          updated_at: string
+        }
+        Insert: {
+          agent_id: string
+          balance?: number | null
+          created_at?: string
+          id?: string
+          last_transaction_at?: string | null
+          total_transactions?: number | null
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string
+          balance?: number | null
+          created_at?: string
+          id?: string
+          last_transaction_at?: string | null
+          total_transactions?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_wallets_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: true
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agents: {
+        Row: {
+          agent_id: string
+          agent_name: string
+          auto_kyc: boolean | null
+          created_at: string
+          created_by: string | null
+          id: string
+          initial_topup: number | null
+          phone_number: string
+          region: string
+          status: Database["public"]["Enums"]["agent_status"] | null
+          supervisor: string
+          updated_at: string
+        }
+        Insert: {
+          agent_id: string
+          agent_name: string
+          auto_kyc?: boolean | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          initial_topup?: number | null
+          phone_number: string
+          region: string
+          status?: Database["public"]["Enums"]["agent_status"] | null
+          supervisor: string
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string
+          agent_name?: string
+          auto_kyc?: boolean | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          initial_topup?: number | null
+          phone_number?: string
+          region?: string
+          status?: Database["public"]["Enums"]["agent_status"] | null
+          supervisor?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_agent_id: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
     }
     Enums: {
-      [_ in never]: never
+      agent_status: "pending" | "active" | "suspended" | "inactive"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +273,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      agent_status: ["pending", "active", "suspended", "inactive"],
+    },
   },
 } as const

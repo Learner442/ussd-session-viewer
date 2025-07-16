@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, Filter, Download, MessageSquare, Gift, Eye, MoreHorizontal } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
+import { supabase } from "@/integrations/supabase/client";
 
 interface AgentMonitoringProps {
   onAgentSelect: (agentId: string) => void;
@@ -18,74 +19,63 @@ export function AgentMonitoring({ onAgentSelect }: AgentMonitoringProps) {
   const [regionFilter, setRegionFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedAgents, setSelectedAgents] = useState<string[]>([]);
+  const [agents, setAgents] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mock agent data
-  const agents = [
-    {
-      id: "AGT_001",
-      name: "Jean Baptiste Mukendi",
-      region: "Goma",
-      walletBalance: 2456.75,
-      todayVolume: 345.20,
-      totalVolume: 12890.50,
-      status: "Active",
-      lastActivity: "2 hours ago",
-      performance: "High",
-      alerts: 0
-    },
-    {
-      id: "AGT_002", 
-      name: "Marie Ngozi Kabila",
-      region: "Bukavu",
-      walletBalance: 1234.50,
-      todayVolume: 567.80,
-      totalVolume: 9876.25,
-      status: "Active",
-      lastActivity: "30 mins ago", 
-      performance: "High",
-      alerts: 1
-    },
-    {
-      id: "AGT_003",
-      name: "Paul Mwanza",
-      region: "Kinshasa",
-      walletBalance: 45.20,
-      todayVolume: 0,
-      totalVolume: 5432.10,
-      status: "Inactive",
-      lastActivity: "3 days ago",
-      performance: "Low",
-      alerts: 2
-    },
-    {
-      id: "AGT_004",
-      name: "Grace Luamba",
-      region: "Goma",
-      walletBalance: 3421.80,
-      todayVolume: 789.40,
-      totalVolume: 15678.90,
-      status: "Active",
-      lastActivity: "1 hour ago",
-      performance: "High",
-      alerts: 0
-    },
-    {
-      id: "AGT_005",
-      name: "Emmanuel Tshisekedi",
-      region: "Lubumbashi",
-      walletBalance: 156.30,
-      todayVolume: 23.50,
-      totalVolume: 3456.78,
-      status: "Active",
-      lastActivity: "4 hours ago",
-      performance: "Medium",
-      alerts: 1
+  // Fetch agents from database
+  const fetchAgents = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('agents')
+        .select(`
+          *,
+          agent_wallets(balance, total_transactions),
+          agent_services(service_type, rate, rate_type)
+        `)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching agents:', error);
+      } else {
+        setAgents(data || []);
+      }
+    } catch (error) {
+      console.error('Error fetching agents:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  useEffect(() => {
+    fetchAgents();
+  }, []);
+
+  // Helper function to format time since creation
+  const getTimeSince = (timestamp: string) => {
+    const now = new Date();
+    const created = new Date(timestamp);
+    const diffInHours = Math.floor((now.getTime() - created.getTime()) / (1000 * 60 * 60));
+    
+    if (diffInHours < 1) return "Just now";
+    if (diffInHours < 24) return `${diffInHours} hours ago`;
+    const diffInDays = Math.floor(diffInHours / 24);
+    return `${diffInDays} days ago`;
+  };
+
+  // Calculate performance based on wallet balance and services
+  const calculatePerformance = (agent: any) => {
+    const balance = agent.agent_wallets?.[0]?.balance || 0;
+    const serviceCount = agent.agent_services?.length || 0;
+    
+    if (balance > 1000 && serviceCount > 2) return "High";
+    if (balance > 100 && serviceCount > 1) return "Medium";
+    return "Low";
+  };
 
   const filteredAgents = agents.filter(agent => {
-    const matchesSearch = agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         agent.id.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = agent.agent_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         agent.agent_id.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesRegion = regionFilter === "all" || agent.region === regionFilter;
     const matchesStatus = statusFilter === "all" || agent.status.toLowerCase() === statusFilter;
     
@@ -102,7 +92,7 @@ export function AgentMonitoring({ onAgentSelect }: AgentMonitoringProps) {
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      setSelectedAgents(filteredAgents.map(agent => agent.id));
+      setSelectedAgents(filteredAgents.map(agent => agent.agent_id));
     } else {
       setSelectedAgents([]);
     }
@@ -110,8 +100,8 @@ export function AgentMonitoring({ onAgentSelect }: AgentMonitoringProps) {
 
   const getStatusBadge = (status: string) => {
     return (
-      <Badge variant={status === "Active" ? "default" : "secondary"}>
-        {status}
+      <Badge variant={status === "active" ? "default" : "secondary"}>
+        {status.charAt(0).toUpperCase() + status.slice(1)}
       </Badge>
     );
   };
@@ -161,14 +151,14 @@ export function AgentMonitoring({ onAgentSelect }: AgentMonitoringProps) {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold">{agents.length}</div>
+            <div className="text-2xl font-bold">{loading ? "..." : agents.length}</div>
             <p className="text-sm text-muted-foreground">Total Agents</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-green-600">
-              {agents.filter(a => a.status === "Active").length}
+              {loading ? "..." : agents.filter(a => a.status === "active").length}
             </div>
             <p className="text-sm text-muted-foreground">Active Today</p>
           </CardContent>
@@ -176,15 +166,15 @@ export function AgentMonitoring({ onAgentSelect }: AgentMonitoringProps) {
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-blue-600">
-              ${agents.reduce((sum, a) => sum + a.todayVolume, 0).toFixed(2)}
+              ${loading ? "..." : agents.reduce((sum, a) => sum + (a.agent_wallets?.[0]?.total_transactions || 0), 0).toFixed(2)}
             </div>
-            <p className="text-sm text-muted-foreground">Today's Volume</p>
+            <p className="text-sm text-muted-foreground">Total Volume</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-red-600">
-              {agents.reduce((sum, a) => sum + a.alerts, 0)}
+              {loading ? "..." : "0"}
             </div>
             <p className="text-sm text-muted-foreground">Total Alerts</p>
           </CardContent>
@@ -266,61 +256,79 @@ export function AgentMonitoring({ onAgentSelect }: AgentMonitoringProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredAgents.map((agent) => (
-                <TableRow key={agent.id}>
-                  <TableCell>
-                    <Checkbox
-                      checked={selectedAgents.includes(agent.id)}
-                      onCheckedChange={(checked) => handleSelectAgent(agent.id, checked as boolean)}
-                    />
-                  </TableCell>
-                  <TableCell className="font-medium">{agent.id}</TableCell>
-                  <TableCell>
-                    <div>
-                      <p className="font-medium">{agent.name}</p>
-                      <p className="text-sm text-muted-foreground">Last: {agent.lastActivity}</p>
-                    </div>
-                  </TableCell>
-                  <TableCell>{agent.region}</TableCell>
-                  <TableCell>
-                    <span className={agent.walletBalance < 100 ? "text-red-600" : "text-green-600"}>
-                      ${agent.walletBalance.toFixed(2)}
-                    </span>
-                  </TableCell>
-                  <TableCell>${agent.todayVolume.toFixed(2)}</TableCell>
-                  <TableCell>${agent.totalVolume.toFixed(2)}</TableCell>
-                  <TableCell>{getStatusBadge(agent.status)}</TableCell>
-                  <TableCell>{getPerformanceBadge(agent.performance)}</TableCell>
-                  <TableCell>
-                    {agent.alerts > 0 && (
-                      <Badge variant="destructive">{agent.alerts}</Badge>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => onAgentSelect(agent.id)}>
-                          <Eye className="h-4 w-4 mr-2" />
-                          View Profile
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <MessageSquare className="h-4 w-4 mr-2" />
-                          Send Message
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Gift className="h-4 w-4 mr-2" />
-                          Send Bonus
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={11} className="text-center py-8">
+                    Loading agents...
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : filteredAgents.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={11} className="text-center py-8 text-muted-foreground">
+                    No agents found. Try adjusting your search criteria.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredAgents.map((agent) => (
+                  <TableRow key={agent.id}>
+                    <TableCell>
+                      <Checkbox
+                        checked={selectedAgents.includes(agent.agent_id)}
+                        onCheckedChange={(checked) => handleSelectAgent(agent.agent_id, checked as boolean)}
+                      />
+                    </TableCell>
+                    <TableCell className="font-medium">{agent.agent_id}</TableCell>
+                    <TableCell>
+                      <div>
+                        <p className="font-medium">{agent.agent_name}</p>
+                        <p className="text-sm text-muted-foreground">
+                          Created: {getTimeSince(agent.created_at)}
+                        </p>
+                      </div>
+                    </TableCell>
+                    <TableCell>{agent.region}</TableCell>
+                    <TableCell>
+                      <span className={
+                        (agent.agent_wallets?.[0]?.balance || 0) < 100 ? "text-red-600" : "text-green-600"
+                      }>
+                        ${(agent.agent_wallets?.[0]?.balance || 0).toFixed(2)}
+                      </span>
+                    </TableCell>
+                    <TableCell>$0.00</TableCell>
+                    <TableCell>
+                      ${(agent.agent_wallets?.[0]?.total_transactions || 0).toFixed(2)}
+                    </TableCell>
+                    <TableCell>{getStatusBadge(agent.status)}</TableCell>
+                    <TableCell>{getPerformanceBadge(calculatePerformance(agent))}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline">0</Badge>
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="sm">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => onAgentSelect(agent.id)}>
+                            <Eye className="h-4 w-4 mr-2" />
+                            View Profile
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <MessageSquare className="h-4 w-4 mr-2" />
+                            Send Message
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Gift className="h-4 w-4 mr-2" />
+                            Send Bonus
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </CardContent>

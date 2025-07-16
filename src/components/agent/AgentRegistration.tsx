@@ -30,6 +30,14 @@ export function AgentRegistration({ onBack }: AgentRegistrationProps) {
       snel: false,
       regideso: false,
       merchant: false
+    },
+    rates: {
+      airtime: "",
+      internet: "",
+      bills: "",
+      snel: "",
+      regideso: "",
+      merchant: ""
     }
   });
 
@@ -42,6 +50,16 @@ export function AgentRegistration({ onBack }: AgentRegistrationProps) {
       services: {
         ...prev.services,
         [service]: checked
+      }
+    }));
+  };
+
+  const handleRateChange = (service: string, rate: string) => {
+    setFormData(prev => ({
+      ...prev,
+      rates: {
+        ...prev.rates,
+        [service]: rate
       }
     }));
   };
@@ -161,8 +179,8 @@ export function AgentRegistration({ onBack }: AgentRegistrationProps) {
               Select which services this agent can offer to customers
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <CardContent className="space-y-6">
+            <div className="space-y-4">
               {Object.entries({
                 airtime: "Airtime Top-up",
                 internet: "Internet Bundles",
@@ -171,15 +189,36 @@ export function AgentRegistration({ onBack }: AgentRegistrationProps) {
                 regideso: "REGIDESO",
                 merchant: "Merchant Registration"
               }).map(([key, label]) => (
-                <div key={key} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={key}
-                    checked={formData.services[key as keyof typeof formData.services]}
-                    onCheckedChange={(checked) => handleServiceChange(key, checked as boolean)}
-                  />
-                  <Label htmlFor={key} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                    {label}
-                  </Label>
+                <div key={key} className="space-y-3 p-4 border rounded-lg">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id={key}
+                      checked={formData.services[key as keyof typeof formData.services]}
+                      onCheckedChange={(checked) => handleServiceChange(key, checked as boolean)}
+                    />
+                    <Label htmlFor={key} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      {label}
+                    </Label>
+                  </div>
+                  
+                  {formData.services[key as keyof typeof formData.services] && (
+                    <div className="ml-6 space-y-2">
+                      <Label htmlFor={`${key}-rate`} className="text-sm text-muted-foreground">
+                        Commission Rate (%)
+                      </Label>
+                      <Input
+                        id={`${key}-rate`}
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="0.1"
+                        value={formData.rates[key as keyof typeof formData.rates]}
+                        onChange={(e) => handleRateChange(key, e.target.value)}
+                        placeholder="e.g., 2.5"
+                        className="w-32"
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

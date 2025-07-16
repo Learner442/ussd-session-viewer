@@ -66,7 +66,7 @@ export function AgentMonitoring({ onAgentSelect, onBack }: AgentMonitoringProps)
 
   // Calculate performance based on wallet balance and services
   const calculatePerformance = (agent: any) => {
-    const balance = agent.agent_wallets?.[0]?.balance || 0;
+    const balance = agent.agent_wallets?.balance || 0;
     const serviceCount = agent.agent_services?.length || 0;
     
     if (balance > 1000 && serviceCount > 2) return "High";
@@ -175,7 +175,7 @@ export function AgentMonitoring({ onAgentSelect, onBack }: AgentMonitoringProps)
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-blue-600">
-              ${loading ? "..." : agents.reduce((sum, a) => sum + (a.agent_wallets?.[0]?.total_transactions || 0), 0).toFixed(2)}
+              ${loading ? "..." : agents.reduce((sum, a) => sum + (a.agent_wallets?.total_transactions || 0), 0).toFixed(2)}
             </div>
             <p className="text-sm text-muted-foreground">Total Volume</p>
           </CardContent>
@@ -305,17 +305,17 @@ export function AgentMonitoring({ onAgentSelect, onBack }: AgentMonitoringProps)
                       </TableCell>
                       <TableCell>
                         <span className={
-                          (agent.agent_wallets?.[0]?.balance || 0) < 100 ? "text-red-600" : "text-green-600"
+                          (agent.agent_wallets?.balance || 0) < 100 ? "text-red-600" : "text-green-600"
                         }>
-                          ${(agent.agent_wallets?.[0]?.balance || 0).toFixed(2)}
+                          ${(agent.agent_wallets?.balance || 0).toFixed(2)}
                         </span>
                       </TableCell>
                       <TableCell>
-                        ${agent.agent_wallets?.[0]?.last_transaction_at ? 
+                        ${agent.agent_wallets?.last_transaction_at ? 
                           (Math.random() * 1000).toFixed(2) : "0.00"}
                       </TableCell>
                       <TableCell>
-                        ${(agent.agent_wallets?.[0]?.total_transactions || 0).toFixed(2)}
+                        ${(agent.agent_wallets?.total_transactions || 0).toFixed(2)}
                       </TableCell>
                       <TableCell>{getStatusBadge(agent.status || 'pending')}</TableCell>
                       <TableCell>{getPerformanceBadge(calculatePerformance(agent))}</TableCell>

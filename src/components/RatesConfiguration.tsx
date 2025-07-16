@@ -113,12 +113,13 @@ export function RatesConfiguration() {
     type: '',
     mnoRate: '',
     dapayMargin: '',
+    agentRate: '',
     rateType: 'fixed' as 'fixed' | 'percentage',
     status: 'active' as 'active' | 'inactive'
   });
 
   const handleCreateRate = () => {
-    if (!newRate.type || !newRate.mnoRate || !newRate.dapayMargin) {
+    if (!newRate.type || !newRate.mnoRate || !newRate.dapayMargin || !newRate.agentRate) {
       toast({
         title: "Error",
         description: "Please fill all required fields",
@@ -149,6 +150,7 @@ export function RatesConfiguration() {
       type: '',
       mnoRate: '',
       dapayMargin: '',
+      agentRate: '',
       rateType: 'fixed',
       status: 'active'
     });
@@ -221,7 +223,7 @@ export function RatesConfiguration() {
               <CardDescription>Configure MNO prices and DAPAY margins</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="rate-type">Service Type</Label>
                   <Select value={newRate.type} onValueChange={(value) => setNewRate({...newRate, type: value})}>
@@ -263,6 +265,18 @@ export function RatesConfiguration() {
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="agent-rate">Agent Rate</Label>
+                  <Input
+                    id="agent-rate"
+                    type="number"
+                    step="0.01"
+                    value={newRate.agentRate}
+                    onChange={(e) => setNewRate({...newRate, agentRate: e.target.value})}
+                    placeholder="Enter agent commission rate"
+                  />
+                </div>
+
+                <div className="space-y-2">
                   <Label htmlFor="rate-type-select">Rate Type</Label>
                   <Select value={newRate.rateType} onValueChange={(value: 'fixed' | 'percentage') => setNewRate({...newRate, rateType: value})}>
                     <SelectTrigger>
@@ -296,10 +310,10 @@ export function RatesConfiguration() {
                 </div>
               </div>
 
-              {newRate.mnoRate && newRate.dapayMargin && (
+              {newRate.mnoRate && newRate.dapayMargin && newRate.agentRate && (
                 <div className="mt-4 p-4 bg-muted rounded-lg">
                   <h4 className="font-semibold mb-2">Rate Preview</h4>
-                  <div className="grid grid-cols-3 gap-4 text-sm">
+                  <div className="grid grid-cols-4 gap-4 text-sm">
                     <div>
                       <span className="text-muted-foreground">MNO Rate:</span>
                       <p className="font-semibold">
@@ -315,6 +329,15 @@ export function RatesConfiguration() {
                         {newRate.rateType === 'fixed' 
                           ? formatCurrency(parseFloat(newRate.dapayMargin) || 0)
                           : `${newRate.dapayMargin}%`
+                        }
+                      </p>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Agent Rate:</span>
+                      <p className="font-semibold">
+                        {newRate.rateType === 'fixed' 
+                          ? formatCurrency(parseFloat(newRate.agentRate) || 0)
+                          : `${newRate.agentRate}%`
                         }
                       </p>
                     </div>

@@ -31,18 +31,20 @@ export function AgentRegistration({ onBack }: AgentRegistrationProps) {
       regideso: false,
       merchant: false
     },
-    rates: {
-      airtime: "",
-      internet: "",
-      bills: "",
-      snel: "",
-      regideso: "",
-      merchant: ""
-    }
   });
 
   const regions = ["Goma", "Bukavu", "Kinshasa", "Lubumbashi", "Matadi"];
   const supervisors = ["John Mukendi", "Marie Ngozi", "Paul Kabila", "Grace Mwanza"];
+  
+  // Mock configured rates (these would come from your rates configuration)
+  const configuredRates = {
+    airtime: { rate: 2.5, type: 'percentage' },
+    internet: { rate: 3.0, type: 'percentage' },
+    bills: { rate: 1.5, type: 'percentage' },
+    snel: { rate: 2.0, type: 'percentage' },
+    regideso: { rate: 1.8, type: 'percentage' },
+    merchant: { rate: 5.0, type: 'fixed' }
+  };
 
   const handleServiceChange = (service: string, checked: boolean) => {
     setFormData(prev => ({
@@ -54,15 +56,6 @@ export function AgentRegistration({ onBack }: AgentRegistrationProps) {
     }));
   };
 
-  const handleRateChange = (service: string, rate: string) => {
-    setFormData(prev => ({
-      ...prev,
-      rates: {
-        ...prev.rates,
-        [service]: rate
-      }
-    }));
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -203,20 +196,15 @@ export function AgentRegistration({ onBack }: AgentRegistrationProps) {
                   
                   {formData.services[key as keyof typeof formData.services] && (
                     <div className="ml-6 space-y-2">
-                      <Label htmlFor={`${key}-rate`} className="text-sm text-muted-foreground">
-                        Commission Rate (%)
+                      <Label className="text-sm text-muted-foreground">
+                        Configured Rate
                       </Label>
-                      <Input
-                        id={`${key}-rate`}
-                        type="number"
-                        min="0"
-                        max="100"
-                        step="0.1"
-                        value={formData.rates[key as keyof typeof formData.rates]}
-                        onChange={(e) => handleRateChange(key, e.target.value)}
-                        placeholder="e.g., 2.5"
-                        className="w-32"
-                      />
+                      <div className="px-3 py-2 bg-muted rounded-md text-sm font-medium">
+                        {configuredRates[key as keyof typeof configuredRates]?.type === 'fixed' 
+                          ? `$${configuredRates[key as keyof typeof configuredRates]?.rate}`
+                          : `${configuredRates[key as keyof typeof configuredRates]?.rate}%`
+                        }
+                      </div>
                     </div>
                   )}
                 </div>

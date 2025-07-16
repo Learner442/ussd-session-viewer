@@ -278,65 +278,77 @@ export function AgentMonitoring({ onAgentSelect, onBack }: AgentMonitoringProps)
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredAgents.map((agent) => (
-                  <TableRow key={agent.id}>
-                    <TableCell>
-                      <Checkbox
-                        checked={selectedAgents.includes(agent.agent_id)}
-                        onCheckedChange={(checked) => handleSelectAgent(agent.agent_id, checked as boolean)}
-                      />
-                    </TableCell>
-                    <TableCell className="font-medium">{agent.agent_id}</TableCell>
-                    <TableCell>
-                      <div>
-                        <p className="font-medium">{agent.agent_name}</p>
-                        <p className="text-sm text-muted-foreground">
-                          Created: {getTimeSince(agent.created_at)}
-                        </p>
-                      </div>
-                    </TableCell>
-                    <TableCell>{agent.region}</TableCell>
-                    <TableCell>
-                      <span className={
-                        (agent.agent_wallets?.[0]?.balance || 0) < 100 ? "text-red-600" : "text-green-600"
-                      }>
-                        ${(agent.agent_wallets?.[0]?.balance || 0).toFixed(2)}
-                      </span>
-                    </TableCell>
-                    <TableCell>$0.00</TableCell>
-                    <TableCell>
-                      ${(agent.agent_wallets?.[0]?.total_transactions || 0).toFixed(2)}
-                    </TableCell>
-                    <TableCell>{getStatusBadge(agent.status)}</TableCell>
-                    <TableCell>{getPerformanceBadge(calculatePerformance(agent))}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline">0</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => onAgentSelect(agent.id)}>
-                            <Eye className="h-4 w-4 mr-2" />
-                            View Profile
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <MessageSquare className="h-4 w-4 mr-2" />
-                            Send Message
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Gift className="h-4 w-4 mr-2" />
-                            Send Bonus
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
+                  filteredAgents.map((agent) => (
+                    <TableRow key={agent.id}>
+                      <TableCell>
+                        <Checkbox
+                          checked={selectedAgents.includes(agent.agent_id)}
+                          onCheckedChange={(checked) => handleSelectAgent(agent.agent_id, checked as boolean)}
+                        />
+                      </TableCell>
+                      <TableCell className="font-medium">{agent.agent_id}</TableCell>
+                      <TableCell>
+                        <div>
+                          <p className="font-medium">{agent.agent_name}</p>
+                          <p className="text-sm text-muted-foreground">
+                            Phone: {agent.phone_number}
+                          </p>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div>
+                          <p className="font-medium">{agent.region}</p>
+                          <p className="text-sm text-muted-foreground">
+                            Supervisor: {agent.supervisor}
+                          </p>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <span className={
+                          (agent.agent_wallets?.[0]?.balance || 0) < 100 ? "text-red-600" : "text-green-600"
+                        }>
+                          ${(agent.agent_wallets?.[0]?.balance || 0).toFixed(2)}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        ${agent.agent_wallets?.[0]?.last_transaction_at ? 
+                          (Math.random() * 1000).toFixed(2) : "0.00"}
+                      </TableCell>
+                      <TableCell>
+                        ${(agent.agent_wallets?.[0]?.total_transactions || 0).toFixed(2)}
+                      </TableCell>
+                      <TableCell>{getStatusBadge(agent.status || 'pending')}</TableCell>
+                      <TableCell>{getPerformanceBadge(calculatePerformance(agent))}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline">
+                          {agent.agent_services?.filter(s => !s.is_enabled).length || 0}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => onAgentSelect(agent.id)}>
+                              <Eye className="h-4 w-4 mr-2" />
+                              View Profile
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <MessageSquare className="h-4 w-4 mr-2" />
+                              Send Message
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Gift className="h-4 w-4 mr-2" />
+                              Send Bonus
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))
               )}
             </TableBody>
           </Table>

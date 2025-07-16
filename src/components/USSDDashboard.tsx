@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, BarChart3, MessageSquare, DollarSign, Users, ChevronDown, ChevronRight, CreditCard, Settings, DollarSign as FXIcon } from "lucide-react";
+import { Home, BarChart3, MessageSquare, DollarSign, Users, ChevronDown, ChevronRight, CreditCard, Settings, DollarSign as FXIcon, UserCheck } from "lucide-react";
 import dapayLogo from "@/assets/dapay-logo.png";
 import {
   Sidebar,
@@ -22,6 +22,7 @@ import { UserMetrics } from "./UserMetrics";
 import { Transactions } from "./Transactions";
 import { RatesConfiguration } from "./RatesConfiguration";
 import { FXConfiguration } from "./FXConfiguration";
+import { AgentManagement } from "./AgentManagement";
 
 const homeItems = [
   { title: "Dashboard", url: "home", icon: Home },
@@ -35,6 +36,10 @@ const reportItems = [
   { title: "Transactions", url: "transactions", icon: CreditCard },
 ];
 
+const agentItems = [
+  { title: "Agent Management", url: "agent-management", icon: UserCheck },
+];
+
 const configItems = [
   { title: "Rates Configuration", url: "rates-configuration", icon: Settings },
   { title: "FX Configuration", url: "fx-configuration", icon: FXIcon },
@@ -42,6 +47,7 @@ const configItems = [
 
 function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveTab: (tab: string) => void }) {
   const [reportsOpen, setReportsOpen] = useState(true);
+  const [agentsOpen, setAgentsOpen] = useState(true);
   const [configOpen, setConfigOpen] = useState(true);
 
   return (
@@ -82,6 +88,34 @@ function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveT
               <SidebarGroupContent>
                 <SidebarMenu>
                   {reportItems.map((item) => (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        onClick={() => setActiveTab(item.url)}
+                        className={activeTab === item.url ? "bg-muted text-primary font-medium" : "hover:bg-muted/50"}
+                      >
+                        <item.icon className="mr-2 h-4 w-4" />
+                        <span>{item.title}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </CollapsibleContent>
+          </Collapsible>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <Collapsible open={agentsOpen} onOpenChange={setAgentsOpen}>
+            <CollapsibleTrigger asChild>
+              <SidebarGroupLabel className="cursor-pointer flex items-center justify-between hover:bg-muted/50 rounded-md">
+                <span>Agents</span>
+                {agentsOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+              </SidebarGroupLabel>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {agentItems.map((item) => (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
                         onClick={() => setActiveTab(item.url)}
@@ -147,6 +181,8 @@ export function USSDDashboard() {
         return <UserMetrics />;
       case "transactions":
         return <Transactions />;
+      case "agent-management":
+        return <AgentManagement />;
       case "rates-configuration":
         return <RatesConfiguration />;
       case "fx-configuration":

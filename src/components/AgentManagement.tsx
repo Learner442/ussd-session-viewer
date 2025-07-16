@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Search, Download, Filter, Users, TrendingUp, AlertTriangle, DollarSign } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { supabase } from "@/integrations/supabase/client";
 import { AgentRegistration } from "./agent/AgentRegistration";
 import { AgentProfile } from "./agent/AgentProfile";
 import { AgentMonitoring } from "./agent/AgentMonitoring";
@@ -14,6 +15,43 @@ export function AgentManagement() {
   const [activeView, setActiveView] = useState<"dashboard" | "profile" | "monitoring">("dashboard");
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
+  const [agents, setAgents] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch agents from database
+  const fetchAgents = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('agents')
+        .select(`
+          *,
+          agent_wallets(balance),
+          agent_services(service_type, rate, rate_type)
+        `)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching agents:', error);
+      } else {
+        setAgents(data || []);
+      }
+    } catch (error) {
+      console.error('Error fetching agents:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAgents();
+  }, []);
+
+  // Refresh agents when registration dialog closes
+  const handleRegistrationClose = () => {
+    setIsRegistrationOpen(false);
+    fetchAgents(); // Refresh the list
+  };
 
   const stats = [
     {
@@ -96,7 +134,7 @@ export function AgentManagement() {
             <DialogHeader>
               <DialogTitle>Register New Agent</DialogTitle>
             </DialogHeader>
-            <AgentRegistration onBack={() => setIsRegistrationOpen(false)} />
+            <AgentRegistration onBack={handleRegistrationClose} />
           </DialogContent>
         </Dialog>
         <Button variant="outline" onClick={() => setActiveView("monitoring")} className="flex items-center gap-2">
@@ -125,18 +163,48 @@ export function AgentManagement() {
             
             <TabsContent value="recent" className="space-y-4">
               <div className="space-y-3">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <div>
-                        <p className="font-medium">AGT_00{i}</p>
-                        <p className="text-sm text-muted-foreground">Transaction: $45.00</p>
+                {loading ? (
+                  <div className="text-center py-4">Loading agents...</div>
+                ) : agents.length === 0 ? (
+                  <div className="text-center py-4 text-muted-foreground">
+                    No agents found. Register your first agent to get started.
+                  </div>
+                ) : (
+                  agents.slice(0, 5).map((agent) => (
+                    <div key={agent.id} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-2 h-2 rounded-full ${
+                          agent.status === 'active' ? 'bg-green-500' : 
+                          agent.status === 'pending' ? 'bg-yellow-500' : 'bg-gray-500'
+                        }`}></div>
+                        <div>
+                          <p className="font-medium">{agent.agent_id}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {agent.agent_name} - {agent.region}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge variant={
+                          agent.status === 'active' ? 'default' : 
+                          agent.status === 'pending' ? 'secondary' : 'outline'
+                        }>
+                          {agent.status}
+                        </Badge>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            setSelectedAgentId(agent.id);
+                            setActiveView("profile");
+                          }}
+                        >
+                          View
+                        </Button>
                       </div>
                     </div>
-                    <Badge variant="secondary">2 mins ago</Badge>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </TabsContent>
             

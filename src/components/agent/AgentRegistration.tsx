@@ -75,19 +75,6 @@ export function AgentRegistration({ onBack }: AgentRegistrationProps) {
     setIsSubmitting(true);
 
     try {
-      // Check if user is authenticated
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        toast({
-          title: "Authentication Required",
-          description: "Please log in to register an agent",
-          variant: "destructive"
-        });
-        setIsSubmitting(false);
-        return;
-      }
-
       // Create the agent record
       const { data: agentData, error: agentError } = await supabase
         .from('agents')
@@ -99,7 +86,6 @@ export function AgentRegistration({ onBack }: AgentRegistrationProps) {
           supervisor: formData.supervisor,
           initial_topup: formData.initialTopup ? parseFloat(formData.initialTopup) : 0,
           auto_kyc: formData.autoKYC,
-          created_by: user.id,
           status: 'pending' as const
         })
         .select()

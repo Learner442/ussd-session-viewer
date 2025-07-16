@@ -89,10 +89,13 @@ export function AgentManagement() {
       case "profile":
         return <AgentProfile agentId={selectedAgentId} onBack={() => setActiveView("dashboard")} />;
       case "monitoring":
-        return <AgentMonitoring onAgentSelect={(id) => {
-          setSelectedAgentId(id);
-          setActiveView("profile");
-        }} />;
+        return <AgentMonitoring 
+          onAgentSelect={(id) => {
+            setSelectedAgentId(id);
+            setActiveView("profile");
+          }}
+          onBack={() => setActiveView("dashboard")}
+        />;
       default:
         return renderDashboard();
     }

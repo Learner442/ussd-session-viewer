@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Search, Filter, Download, MessageSquare, Gift, Eye, MoreHorizontal } from "lucide-react";
+import { Search, Filter, Download, MessageSquare, Gift, Eye, MoreHorizontal, ArrowLeft } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,9 +12,10 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface AgentMonitoringProps {
   onAgentSelect: (agentId: string) => void;
+  onBack?: () => void;
 }
 
-export function AgentMonitoring({ onAgentSelect }: AgentMonitoringProps) {
+export function AgentMonitoring({ onAgentSelect, onBack }: AgentMonitoringProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [regionFilter, setRegionFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -123,9 +124,17 @@ export function AgentMonitoring({ onAgentSelect }: AgentMonitoringProps) {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Agent Monitoring</h1>
-          <p className="text-muted-foreground">Monitor and manage all field agents across regions</p>
+        <div className="flex items-center gap-4">
+          {onBack && (
+            <Button variant="outline" size="sm" onClick={onBack}>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
+            </Button>
+          )}
+          <div>
+            <h1 className="text-2xl font-bold">Agent Monitoring</h1>
+            <p className="text-muted-foreground">Monitor and manage all field agents across regions</p>
+          </div>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm">

@@ -5,13 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AgentRegistration } from "./agent/AgentRegistration";
 import { AgentProfile } from "./agent/AgentProfile";
 import { AgentMonitoring } from "./agent/AgentMonitoring";
 
 export function AgentManagement() {
-  const [activeView, setActiveView] = useState<"dashboard" | "register" | "profile" | "monitoring">("dashboard");
+  const [activeView, setActiveView] = useState<"dashboard" | "profile" | "monitoring">("dashboard");
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
+  const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
 
   const stats = [
     {
@@ -46,8 +48,6 @@ export function AgentManagement() {
 
   const renderContent = () => {
     switch (activeView) {
-      case "register":
-        return <AgentRegistration onBack={() => setActiveView("dashboard")} />;
       case "profile":
         return <AgentProfile agentId={selectedAgentId} onBack={() => setActiveView("dashboard")} />;
       case "monitoring":
@@ -85,10 +85,20 @@ export function AgentManagement() {
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4">
-        <Button onClick={() => setActiveView("register")} className="flex items-center gap-2">
-          <Plus className="h-4 w-4" />
-          Register New Agent
-        </Button>
+        <Dialog open={isRegistrationOpen} onOpenChange={setIsRegistrationOpen}>
+          <DialogTrigger asChild>
+            <Button className="flex items-center gap-2">
+              <Plus className="h-4 w-4" />
+              Register New Agent
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Register New Agent</DialogTitle>
+            </DialogHeader>
+            <AgentRegistration onBack={() => setIsRegistrationOpen(false)} />
+          </DialogContent>
+        </Dialog>
         <Button variant="outline" onClick={() => setActiveView("monitoring")} className="flex items-center gap-2">
           <Users className="h-4 w-4" />
           Agent Monitoring

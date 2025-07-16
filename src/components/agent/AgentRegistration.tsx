@@ -84,18 +84,6 @@ export function AgentRegistration({ onBack }: AgentRegistrationProps) {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <Button variant="outline" size="sm" onClick={onBack}>
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold">Register New Agent</h1>
-          <p className="text-muted-foreground">Create a new agent profile with services and permissions</p>
-        </div>
-      </div>
-
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
         <Card>
@@ -253,7 +241,7 @@ export function AgentRegistration({ onBack }: AgentRegistrationProps) {
         </Card>
 
         {/* Submit Button */}
-        <div className="flex justify-end gap-4">
+        <div className="flex justify-end gap-4 pt-4">
           <Button type="button" variant="outline" onClick={onBack}>
             Cancel
           </Button>

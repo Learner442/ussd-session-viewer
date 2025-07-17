@@ -9,6 +9,9 @@ import { AgentPerformanceTable } from './sales/AgentPerformanceTable';
 import { CommissionCalculator } from './sales/CommissionCalculator';
 import { PerformanceCharts } from './sales/PerformanceCharts';
 import { AgentAnalytics } from './sales/AgentAnalytics';
+import { AgentManagement } from './sales/AgentManagement';
+import { AdvancedReporting } from './sales/AdvancedReporting';
+import { PerformanceManagement } from './sales/PerformanceManagement';
 import { DateRange } from 'react-day-picker';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -274,16 +277,27 @@ export const SalesAgentModule = () => {
       </div>
 
       {/* Main Content Tabs */}
-      <Tabs defaultValue="performance" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="performance">Agent Performance</TabsTrigger>
-          <TabsTrigger value="commissions">Commission Calculator</TabsTrigger>
-          <TabsTrigger value="charts">Performance Charts</TabsTrigger>
-          <TabsTrigger value="analytics">Advanced Analytics</TabsTrigger>
+      <Tabs defaultValue="management" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-7">
+          <TabsTrigger value="management">Agent Management</TabsTrigger>
+          <TabsTrigger value="performance">Performance Table</TabsTrigger>
+          <TabsTrigger value="reporting">Advanced Reports</TabsTrigger>
+          <TabsTrigger value="commissions">Commissions</TabsTrigger>
+          <TabsTrigger value="charts">Charts</TabsTrigger>
+          <TabsTrigger value="performance-mgmt">Performance Mgmt</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="management">
+          <AgentManagement />
+        </TabsContent>
 
         <TabsContent value="performance">
           <AgentPerformanceTable filters={filters} />
+        </TabsContent>
+
+        <TabsContent value="reporting">
+          <AdvancedReporting />
         </TabsContent>
 
         <TabsContent value="commissions">
@@ -292,6 +306,10 @@ export const SalesAgentModule = () => {
 
         <TabsContent value="charts">
           <PerformanceCharts filters={filters} />
+        </TabsContent>
+
+        <TabsContent value="performance-mgmt">
+          <PerformanceManagement />
         </TabsContent>
 
         <TabsContent value="analytics">

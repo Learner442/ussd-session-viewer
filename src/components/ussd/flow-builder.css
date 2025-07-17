@@ -1,0 +1,95 @@
+/* Custom styles for the USSD Flow Builder */
+
+.react-flow__node-stepNode {
+  background: transparent;
+  border: none;
+}
+
+.react-flow__handle {
+  border: 2px solid #374151;
+  background: white;
+  width: 8px;
+  height: 8px;
+}
+
+.react-flow__handle.connectionindicator {
+  background: #3b82f6;
+}
+
+.react-flow__edge.selected {
+  z-index: 10;
+}
+
+.react-flow__edge-path {
+  stroke: #6b7280;
+  stroke-width: 2;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #3b82f6;
+  stroke-width: 3;
+}
+
+.react-flow__edge-textbg {
+  fill: white;
+  stroke: #e5e7eb;
+  stroke-width: 1;
+}
+
+.react-flow__edge-text {
+  font-size: 12px;
+  fill: #374151;
+  font-weight: 500;
+}
+
+.react-flow__controls {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.react-flow__controls-button {
+  border: none;
+  background: white;
+  color: #374151;
+  font-size: 16px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.react-flow__controls-button:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.react-flow__minimap {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.react-flow__background {
+  background-color: #f9fafb;
+}
+
+/* Node specific styles */
+.ussd-step-node {
+  transition: all 0.2s ease;
+}
+
+.ussd-step-node:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.3);
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

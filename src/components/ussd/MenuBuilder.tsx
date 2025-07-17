@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Plus, Edit, Trash2, ArrowRight, ArrowUp, ArrowDown, Save } from "lucide-react";
+import { Plus, Edit, Trash2, ArrowRight, ArrowUp, ArrowDown, Save, Workflow, List } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,8 +10,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { VisualFlowBuilder } from "./VisualFlowBuilder";
 
 interface MenuStep {
   id: string;
@@ -353,7 +355,7 @@ export function MenuBuilder({ selectedFlowId }: MenuBuilderProps) {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-foreground">Menu Builder</h2>
-          <p className="text-muted-foreground">Design your USSD menu flow with steps and options</p>
+          <p className="text-muted-foreground">Design your USSD menu flow with visual or form-based tools</p>
         </div>
         
         <Dialog open={isStepDialogOpen} onOpenChange={setIsStepDialogOpen}>
@@ -493,7 +495,30 @@ export function MenuBuilder({ selectedFlowId }: MenuBuilderProps) {
         </Dialog>
       </div>
 
-      {/* Steps List */}
+      {/* Builder Tabs */}
+      <Tabs defaultValue="visual" className="space-y-4">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="visual" className="flex items-center gap-2">
+            <Workflow className="h-4 w-4" />
+            Visual Builder
+          </TabsTrigger>
+          <TabsTrigger value="form" className="flex items-center gap-2">
+            <List className="h-4 w-4" />
+            Form Builder
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="visual" className="space-y-4">
+          <VisualFlowBuilder
+            selectedFlowId={selectedFlowId}
+            steps={steps}
+            options={options}
+            onStepsChange={loadFlowSteps}
+          />
+        </TabsContent>
+
+        <TabsContent value="form" className="space-y-4">
+          {/* Steps List */}
       <div className="space-y-4">
         {loading ? (
           <Card>
@@ -708,6 +733,8 @@ export function MenuBuilder({ selectedFlowId }: MenuBuilderProps) {
           </form>
         </DialogContent>
       </Dialog>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

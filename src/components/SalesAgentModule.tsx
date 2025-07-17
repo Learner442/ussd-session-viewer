@@ -11,6 +11,7 @@ import { CommissionCalculator } from './sales/CommissionCalculator';
 import { PerformanceCharts } from './sales/PerformanceCharts';
 import { AgentAnalytics } from './sales/AgentAnalytics';
 import { AgentManagement } from './sales/AgentManagement';
+import { SalesAgentManagement } from './sales/SalesAgentManagement';
 import { AdvancedReporting } from './sales/AdvancedReporting';
 import { PerformanceManagement } from './sales/PerformanceManagement';
 import { DateRange } from 'react-day-picker';
@@ -58,7 +59,14 @@ export const SalesAgentModule = () => {
     try {
       setLoading(true);
 
-      // Load agents count
+      // Load sales agents count (supervisors)
+      const { data: salesAgents, error: salesAgentsError } = await supabase
+        .from('sales_agents')
+        .select('*');
+
+      if (salesAgentsError) throw salesAgentsError;
+
+      // Load regular agents count
       const { data: agents, error: agentsError } = await supabase
         .from('agents')
         .select('*');
@@ -72,12 +80,14 @@ export const SalesAgentModule = () => {
 
       if (transactionsError) throw transactionsError;
 
-      // Load total commissions
-      const { data: commissions, error: commissionsError } = await supabase
-        .from('agent_commissions')
-        .select('total_commission');
+      // Load total commissions for both regular agents and sales agents
+      const [agentCommissions, salesAgentCommissions] = await Promise.all([
+        supabase.from('agent_commissions').select('total_commission'),
+        supabase.from('sales_agent_commissions').select('total_earning')
+      ]);
 
-      if (commissionsError) throw commissionsError;
+      if (agentCommissions.error) throw agentCommissions.error;
+      if (salesAgentCommissions.error) throw salesAgentCommissions.error;
 
       // Load active users count
       const { data: activeUsers, error: activeUsersError } = await supabase
@@ -88,12 +98,13 @@ export const SalesAgentModule = () => {
       if (activeUsersError) throw activeUsersError;
 
       const totalRevenue = transactions?.reduce((sum, t) => sum + (Number(t.revenue_generated) || 0), 0) || 0;
-      const totalCommissions = commissions?.reduce((sum, c) => sum + (Number(c.total_commission) || 0), 0) || 0;
+      const totalAgentCommissions = agentCommissions.data?.reduce((sum, c) => sum + (Number(c.total_commission) || 0), 0) || 0;
+      const totalSalesAgentCommissions = salesAgentCommissions.data?.reduce((sum, c) => sum + (Number(c.total_earning) || 0), 0) || 0;
 
       setMetrics({
-        totalAgents: agents?.length || 0,
+        totalAgents: (salesAgents?.length || 0) + (agents?.length || 0), // Total of both sales agents and regular agents
         totalRevenue,
-        totalCommissions,
+        totalCommissions: totalAgentCommissions + totalSalesAgentCommissions,
         activeUsers: activeUsers?.length || 0
       });
 
@@ -280,18 +291,25 @@ export const SalesAgentModule = () => {
       </div>
 
       {/* Main Content Tabs */}
-      <Tabs defaultValue="management" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-7">
-          <TabsTrigger value="management">{t('tabs.agentManagement')}</TabsTrigger>
-          <TabsTrigger value="performance">{t('tabs.performanceTable')}</TabsTrigger>
-          <TabsTrigger value="reporting">{t('tabs.advancedReports')}</TabsTrigger>
-          <TabsTrigger value="commissions">{t('tabs.commissions')}</TabsTrigger>
-          <TabsTrigger value="charts">{t('tabs.charts')}</TabsTrigger>
-          <TabsTrigger value="performance-mgmt">{t('tabs.performanceMgmt')}</TabsTrigger>
-          <TabsTrigger value="analytics">{t('tabs.analytics')}</TabsTrigger>
+      <Tabs defaultValue="sales-agents" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-8">
+          <TabsTrigger value="sales-agents">Sales Agents</TabsTrigger>
+          <TabsTrigger value="agents">Regular Agents</TabsTrigger>
+          <TabsTrigger value="performance">Performance Table</TabsTrigger>
+          <TabsTrigger value="reporting">Advanced Reports</TabsTrigger>
+          <TabsTrigger value="commissions">Commissions</TabsTrigger>
+          <TabsTrigger value="charts">Charts</TabsTrigger>
+          <TabsTrigger value="performance-mgmt">Performance Mgmt</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="management">
+        <TabsContent value="sales-agents">
+          <ErrorBoundary>
+            <SalesAgentManagement />
+          </ErrorBoundary>
+        </TabsContent>
+
+        <TabsContent value="agents">
           <ErrorBoundary>
             <AgentManagement />
           </ErrorBoundary>

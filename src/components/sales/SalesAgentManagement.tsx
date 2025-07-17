@@ -8,127 +8,103 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { UserPlus, Edit, Trash2, Filter, Users, MapPin, Target, AlertTriangle } from 'lucide-react';
+import { UserPlus, Edit, Trash2, Filter, Crown, Users, DollarSign, Target } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-
-interface Agent {
-  id: string;
-  agent_id: string;
-  agent_name: string;
-  phone_number: string;
-  region: string;
-  status: string;
-  supervisor: string;
-  initial_topup: number;
-  created_at: string;
-  updated_at: string;
-  sales_quota?: number;
-  territory?: string;
-  last_activity?: string;
-}
-
-interface NewAgentForm {
-  agent_name: string;
-  phone_number: string;
-  region: string;
-  sales_agent_id: string; // Changed from supervisor to sales_agent_id
-  initial_topup: number;
-  sales_quota: number;
-  territory: string;
-}
 
 interface SalesAgent {
   id: string;
   sales_agent_id: string;
   agent_name: string;
+  phone_number: string;
+  email?: string;
   region: string;
+  department: string;
+  role: string;
   status: string;
+  initial_budget: number;
+  commission_rate: number;
+  target_quota: number;
+  created_at: string;
+  updated_at: string;
+  supervised_agents_count?: number;
 }
 
-export const AgentManagement = () => {
+interface NewSalesAgentForm {
+  agent_name: string;
+  phone_number: string;
+  email: string;
+  region: string;
+  department: string;
+  initial_budget: number;
+  commission_rate: number;
+  target_quota: number;
+}
+
+export const SalesAgentManagement = () => {
   const { toast } = useToast();
-  const [agents, setAgents] = useState<Agent[]>([]);
   const [salesAgents, setSalesAgents] = useState<SalesAgent[]>([]);
-  const [filteredAgents, setFilteredAgents] = useState<Agent[]>([]);
+  const [filteredSalesAgents, setFilteredSalesAgents] = useState<SalesAgent[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
+  const [selectedSalesAgent, setSelectedSalesAgent] = useState<SalesAgent | null>(null);
   const [filters, setFilters] = useState({
     region: 'all',
     status: 'all',
-    seniority: 'all'
+    department: 'all'
   });
 
-  const [newAgentForm, setNewAgentForm] = useState<NewAgentForm>({
+  const [newSalesAgentForm, setNewSalesAgentForm] = useState<NewSalesAgentForm>({
     agent_name: '',
     phone_number: '',
+    email: '',
     region: '',
-    sales_agent_id: '', // Changed from supervisor
-    initial_topup: 0,
-    sales_quota: 100000,
-    territory: ''
+    department: 'Sales',
+    initial_budget: 50000,
+    commission_rate: 0.05,
+    target_quota: 100000
   });
 
   useEffect(() => {
-    loadAgents();
     loadSalesAgents();
   }, []);
 
   useEffect(() => {
     applyFilters();
-  }, [agents, filters]);
+  }, [salesAgents, filters]);
 
   const loadSalesAgents = async () => {
     try {
-      const { data, error } = await supabase
-        .from('sales_agents')
-        .select('*')
-        .eq('status', 'active');
-
-      if (error) throw error;
-      setSalesAgents(data || []);
-    } catch (error) {
-      console.error('Error loading sales agents:', error);
-    }
-  };
-
-  const loadAgents = async () => {
-    try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('agents')
+        .from('sales_agents')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
 
-      // Load last activity for each agent
-      const agentsWithActivity = await Promise.all(
-        (data || []).map(async (agent) => {
-          const { data: lastSession } = await supabase
-            .from('agent_user_sessions')
-            .select('session_date')
-            .eq('agent_id', agent.id)
-            .order('session_date', { ascending: false })
-            .limit(1);
+      // Load supervised agents count for each sales agent
+      const salesAgentsWithCounts = await Promise.all(
+        (data || []).map(async (salesAgent) => {
+          const { data: supervisedAgents } = await supabase
+            .from('agents')
+            .select('id')
+            .eq('sales_agent_id', salesAgent.id);
 
           return {
-            ...agent,
-            last_activity: lastSession?.[0]?.session_date || agent.updated_at,
-            sales_quota: 100000, // Default quota
-            territory: agent.region // Default territory same as region
+            ...salesAgent,
+            supervised_agents_count: supervisedAgents?.length || 0
           };
         })
       );
 
-      setAgents(agentsWithActivity);
+      setSalesAgents(salesAgentsWithCounts);
     } catch (error) {
-      console.error('Error loading agents:', error);
+      console.error('Error loading sales agents:', error);
       toast({
-        title: "Error loading agents",
-        description: "Failed to load agents data.",
+        title: "Error loading sales agents",
+        description: "Failed to load sales agents data.",
         variant: "destructive"
       });
     } finally {
@@ -137,7 +113,7 @@ export const AgentManagement = () => {
   };
 
   const applyFilters = () => {
-    let filtered = [...agents];
+    let filtered = [...salesAgents];
 
     if (filters.region !== 'all') {
       filtered = filtered.filter(agent => agent.region === filters.region);
@@ -147,159 +123,117 @@ export const AgentManagement = () => {
       filtered = filtered.filter(agent => agent.status === filters.status);
     }
 
-    if (filters.seniority !== 'all') {
-      const threeMonthsAgo = new Date();
-      threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
-      
-      if (filters.seniority === 'senior') {
-        filtered = filtered.filter(agent => new Date(agent.created_at) <= threeMonthsAgo);
-      } else if (filters.seniority === 'junior') {
-        filtered = filtered.filter(agent => new Date(agent.created_at) > threeMonthsAgo);
-      }
+    if (filters.department !== 'all') {
+      filtered = filtered.filter(agent => agent.department === filters.department);
     }
 
-    setFilteredAgents(filtered);
+    setFilteredSalesAgents(filtered);
   };
 
-  const addAgent = async () => {
+  const addSalesAgent = async () => {
     try {
       const { error } = await supabase
-        .from('agents')
+        .from('sales_agents')
         .insert({
-          agent_id: '', // Will be auto-generated by trigger
-          agent_name: newAgentForm.agent_name,
-          phone_number: newAgentForm.phone_number,
-          region: newAgentForm.region,
-          supervisor: '', // Temporary for compatibility
-          sales_agent_id: newAgentForm.sales_agent_id || null,
-          initial_topup: newAgentForm.initial_topup,
-          status: 'pending' as const
+          sales_agent_id: '', // Will be auto-generated by trigger
+          agent_name: newSalesAgentForm.agent_name,
+          phone_number: newSalesAgentForm.phone_number,
+          email: newSalesAgentForm.email,
+          region: newSalesAgentForm.region,
+          department: newSalesAgentForm.department,
+          initial_budget: newSalesAgentForm.initial_budget,
+          commission_rate: newSalesAgentForm.commission_rate,
+          target_quota: newSalesAgentForm.target_quota,
+          status: 'active' as const
         });
 
       if (error) throw error;
 
       toast({
-        title: "Agent added successfully",
-        description: `${newAgentForm.agent_name} has been added as a new agent.`,
+        title: "Sales Agent added successfully",
+        description: `${newSalesAgentForm.agent_name} has been added as a new sales agent.`,
       });
 
       setIsAddDialogOpen(false);
-      setNewAgentForm({
+      setNewSalesAgentForm({
         agent_name: '',
         phone_number: '',
+        email: '',
         region: '',
-        sales_agent_id: '',
-        initial_topup: 0,
-        sales_quota: 100000,
-        territory: ''
+        department: 'Sales',
+        initial_budget: 50000,
+        commission_rate: 0.05,
+        target_quota: 100000
       });
-      loadAgents();
+      loadSalesAgents();
     } catch (error) {
-      console.error('Error adding agent:', error);
+      console.error('Error adding sales agent:', error);
       toast({
-        title: "Error adding agent",
-        description: "Failed to add new agent.",
+        title: "Error adding sales agent",
+        description: "Failed to add new sales agent.",
         variant: "destructive"
       });
     }
   };
 
-  const updateAgent = async () => {
-    if (!selectedAgent) return;
+  const updateSalesAgent = async () => {
+    if (!selectedSalesAgent) return;
 
     try {
       const { error } = await supabase
-        .from('agents')
+        .from('sales_agents')
         .update({
-          agent_name: selectedAgent.agent_name,
-          phone_number: selectedAgent.phone_number,
-          region: selectedAgent.region,
-          supervisor: selectedAgent.supervisor,
-          status: selectedAgent.status as "pending" | "active" | "suspended" | "inactive"
+          agent_name: selectedSalesAgent.agent_name,
+          phone_number: selectedSalesAgent.phone_number,
+          email: selectedSalesAgent.email,
+          region: selectedSalesAgent.region,
+          department: selectedSalesAgent.department,
+          commission_rate: selectedSalesAgent.commission_rate,
+          target_quota: selectedSalesAgent.target_quota,
+          status: selectedSalesAgent.status as "pending" | "active" | "suspended" | "inactive"
         })
-        .eq('id', selectedAgent.id);
+        .eq('id', selectedSalesAgent.id);
 
       if (error) throw error;
 
       toast({
-        title: "Agent updated successfully",
-        description: `${selectedAgent.agent_name}'s information has been updated.`,
+        title: "Sales Agent updated successfully",
+        description: `${selectedSalesAgent.agent_name}'s information has been updated.`,
       });
 
       setIsEditDialogOpen(false);
-      setSelectedAgent(null);
-      loadAgents();
+      setSelectedSalesAgent(null);
+      loadSalesAgents();
     } catch (error) {
-      console.error('Error updating agent:', error);
+      console.error('Error updating sales agent:', error);
       toast({
-        title: "Error updating agent",
-        description: "Failed to update agent information.",
+        title: "Error updating sales agent",
+        description: "Failed to update sales agent information.",
         variant: "destructive"
       });
     }
   };
 
-  const deactivateAgent = async (agentId: string, agentName: string) => {
+  const deactivateSalesAgent = async (agentId: string, agentName: string) => {
     try {
       const { error } = await supabase
-        .from('agents')
+        .from('sales_agents')
         .update({ status: 'inactive' as const })
         .eq('id', agentId);
 
       if (error) throw error;
 
       toast({
-        title: "Agent deactivated",
+        title: "Sales Agent deactivated",
         description: `${agentName} has been deactivated.`,
       });
 
-      loadAgents();
+      loadSalesAgents();
     } catch (error) {
-      console.error('Error deactivating agent:', error);
+      console.error('Error deactivating sales agent:', error);
       toast({
-        title: "Error deactivating agent",
-        description: "Failed to deactivate agent.",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const deactivateInactiveAgents = async () => {
-    try {
-      const threeMonthsAgo = new Date();
-      threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
-
-      const inactiveAgents = agents.filter(agent => {
-        const lastActivity = new Date(agent.last_activity || agent.updated_at);
-        return lastActivity <= threeMonthsAgo && agent.status === 'active';
-      });
-
-      if (inactiveAgents.length === 0) {
-        toast({
-          title: "No inactive agents found",
-          description: "All agents have been active in the past 3 months.",
-        });
-        return;
-      }
-
-      for (const agent of inactiveAgents) {
-        await supabase
-          .from('agents')
-          .update({ status: 'inactive' as const })
-          .eq('id', agent.id);
-      }
-
-      toast({
-        title: "Inactive agents deactivated",
-        description: `${inactiveAgents.length} agents have been deactivated due to inactivity.`,
-      });
-
-      loadAgents();
-    } catch (error) {
-      console.error('Error deactivating inactive agents:', error);
-      toast({
-        title: "Error deactivating agents",
-        description: "Failed to deactivate inactive agents.",
+        title: "Error deactivating sales agent",
+        description: "Failed to deactivate sales agent.",
         variant: "destructive"
       });
     }
@@ -317,56 +251,28 @@ export const AgentManagement = () => {
     return <Badge variant={config.variant}>{config.label}</Badge>;
   };
 
-  const getSeniorityBadge = (createdAt: string) => {
-    const threeMonthsAgo = new Date();
-    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
-    const agentDate = new Date(createdAt);
-    
-    return agentDate <= threeMonthsAgo ? 
-      <Badge variant="default">Senior</Badge> : 
-      <Badge variant="outline">Junior</Badge>;
-  };
-
   return (
     <div className="space-y-6">
       {/* Header Actions */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold">Sales Agent Management</h2>
-          <p className="text-muted-foreground">Add, update, and manage sales agents</p>
+          <h2 className="text-2xl font-bold flex items-center gap-2">
+            <Crown className="h-6 w-6 text-yellow-600" />
+            Sales Agent Management (Supervisors)
+          </h2>
+          <p className="text-muted-foreground">Manage sales agents who supervise regular agents</p>
         </div>
         <div className="flex gap-2">
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="outline">
-                <AlertTriangle className="h-4 w-4 mr-2" />
-                Deactivate Inactive
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Deactivate Inactive Agents</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will deactivate all agents who haven't logged any activity in the past 3 months. Are you sure you want to continue?
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={deactivateInactiveAgents}>Deactivate</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
               <Button>
                 <UserPlus className="h-4 w-4 mr-2" />
-                Add New Agent
+                Add New Sales Agent
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="max-w-2xl">
               <DialogHeader>
-                <DialogTitle>Add New Sales Agent</DialogTitle>
+                <DialogTitle>Add New Sales Agent (Supervisor)</DialogTitle>
               </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-2 gap-4">
@@ -374,8 +280,8 @@ export const AgentManagement = () => {
                     <Label htmlFor="name">Agent Name</Label>
                     <Input
                       id="name"
-                      value={newAgentForm.agent_name}
-                      onChange={(e) => setNewAgentForm(prev => ({ ...prev, agent_name: e.target.value }))}
+                      value={newSalesAgentForm.agent_name}
+                      onChange={(e) => setNewSalesAgentForm(prev => ({ ...prev, agent_name: e.target.value }))}
                       placeholder="John Doe"
                     />
                   </div>
@@ -383,16 +289,26 @@ export const AgentManagement = () => {
                     <Label htmlFor="phone">Phone Number</Label>
                     <Input
                       id="phone"
-                      value={newAgentForm.phone_number}
-                      onChange={(e) => setNewAgentForm(prev => ({ ...prev, phone_number: e.target.value }))}
+                      value={newSalesAgentForm.phone_number}
+                      onChange={(e) => setNewSalesAgentForm(prev => ({ ...prev, phone_number: e.target.value }))}
                       placeholder="+1234567890"
                     />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={newSalesAgentForm.email}
+                      onChange={(e) => setNewSalesAgentForm(prev => ({ ...prev, email: e.target.value }))}
+                      placeholder="john@example.com"
+                    />
+                  </div>
+                  <div>
                     <Label htmlFor="region">Region</Label>
-                    <Select value={newAgentForm.region} onValueChange={(value) => setNewAgentForm(prev => ({ ...prev, region: value }))}>
+                    <Select value={newSalesAgentForm.region} onValueChange={(value) => setNewSalesAgentForm(prev => ({ ...prev, region: value }))}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select region" />
                       </SelectTrigger>
@@ -405,47 +321,43 @@ export const AgentManagement = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div>
-                    <Label htmlFor="sales_agent">Sales Agent (Supervisor)</Label>
-                    <Select value={newAgentForm.sales_agent_id} onValueChange={(value) => setNewAgentForm(prev => ({ ...prev, sales_agent_id: value }))}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select sales agent" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="">No Supervisor</SelectItem>
-                        {salesAgents.map((salesAgent) => (
-                          <SelectItem key={salesAgent.id} value={salesAgent.id}>
-                            {salesAgent.agent_name} ({salesAgent.sales_agent_id})
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <Label htmlFor="quota">Sales Quota ($)</Label>
+                    <Label htmlFor="budget">Initial Budget ($)</Label>
                     <Input
-                      id="quota"
+                      id="budget"
                       type="number"
-                      value={newAgentForm.sales_quota}
-                      onChange={(e) => setNewAgentForm(prev => ({ ...prev, sales_quota: Number(e.target.value) }))}
+                      value={newSalesAgentForm.initial_budget}
+                      onChange={(e) => setNewSalesAgentForm(prev => ({ ...prev, initial_budget: Number(e.target.value) }))}
                     />
                   </div>
                   <div>
-                    <Label htmlFor="topup">Initial Top-up ($)</Label>
+                    <Label htmlFor="commission">Commission Rate (%)</Label>
                     <Input
-                      id="topup"
+                      id="commission"
                       type="number"
-                      value={newAgentForm.initial_topup}
-                      onChange={(e) => setNewAgentForm(prev => ({ ...prev, initial_topup: Number(e.target.value) }))}
+                      step="0.01"
+                      max="1"
+                      min="0"
+                      value={newSalesAgentForm.commission_rate * 100}
+                      onChange={(e) => setNewSalesAgentForm(prev => ({ ...prev, commission_rate: Number(e.target.value) / 100 }))}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="quota">Target Quota ($)</Label>
+                    <Input
+                      id="quota"
+                      type="number"
+                      value={newSalesAgentForm.target_quota}
+                      onChange={(e) => setNewSalesAgentForm(prev => ({ ...prev, target_quota: Number(e.target.value) }))}
                     />
                   </div>
                 </div>
               </div>
               <div className="flex justify-end gap-2">
                 <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>Cancel</Button>
-                <Button onClick={addAgent}>Add Agent</Button>
+                <Button onClick={addSalesAgent}>Add Sales Agent</Button>
               </div>
             </DialogContent>
           </Dialog>
@@ -457,7 +369,7 @@ export const AgentManagement = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Filter className="h-5 w-5" />
-            Filter Agents
+            Filter Sales Agents
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -494,15 +406,16 @@ export const AgentManagement = () => {
               </Select>
             </div>
             <div>
-              <Label>Seniority</Label>
-              <Select value={filters.seniority} onValueChange={(value) => setFilters(prev => ({ ...prev, seniority: value }))}>
+              <Label>Department</Label>
+              <Select value={filters.department} onValueChange={(value) => setFilters(prev => ({ ...prev, department: value }))}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Seniority</SelectItem>
-                  <SelectItem value="senior">Senior (3+ months)</SelectItem>
-                  <SelectItem value="junior">Junior (&lt;3 months)</SelectItem>
+                  <SelectItem value="all">All Departments</SelectItem>
+                  <SelectItem value="Sales">Sales</SelectItem>
+                  <SelectItem value="Marketing">Marketing</SelectItem>
+                  <SelectItem value="Operations">Operations</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -510,14 +423,14 @@ export const AgentManagement = () => {
         </CardContent>
       </Card>
 
-      {/* Agents Table */}
+      {/* Sales Agents Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Sales Agents ({filteredAgents.length})</CardTitle>
+          <CardTitle>Sales Agents ({filteredSalesAgents.length})</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
-            <div className="text-center py-8">Loading agents...</div>
+            <div className="text-center py-8">Loading sales agents...</div>
           ) : (
             <Table>
               <TableHeader>
@@ -525,34 +438,47 @@ export const AgentManagement = () => {
                   <TableHead>Agent ID</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Region</TableHead>
-                  <TableHead>Territory</TableHead>
-                  <TableHead>Sales Quota</TableHead>
-                  <TableHead>Supervisor</TableHead>
+                  <TableHead>Department</TableHead>
+                  <TableHead>Supervised Agents</TableHead>
+                  <TableHead>Commission Rate</TableHead>
+                  <TableHead>Target Quota</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Seniority</TableHead>
-                  <TableHead>Last Activity</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredAgents.map((agent) => (
+                {filteredSalesAgents.map((agent) => (
                   <TableRow key={agent.id}>
-                    <TableCell className="font-medium">{agent.agent_id}</TableCell>
-                    <TableCell>{agent.agent_name}</TableCell>
+                    <TableCell className="font-medium">{agent.sales_agent_id}</TableCell>
+                    <TableCell>
+                      <div>
+                        <p className="font-medium">{agent.agent_name}</p>
+                        <p className="text-sm text-muted-foreground">{agent.email}</p>
+                      </div>
+                    </TableCell>
                     <TableCell className="capitalize">{agent.region}</TableCell>
-                    <TableCell className="capitalize">{agent.territory}</TableCell>
-                    <TableCell>${agent.sales_quota?.toLocaleString()}</TableCell>
-                    <TableCell>{agent.supervisor}</TableCell>
+                    <TableCell>{agent.department}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <Users className="h-4 w-4" />
+                        {agent.supervised_agents_count}
+                      </div>
+                    </TableCell>
+                    <TableCell>{(agent.commission_rate * 100).toFixed(2)}%</TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <Target className="h-4 w-4" />
+                        ${agent.target_quota.toLocaleString()}
+                      </div>
+                    </TableCell>
                     <TableCell>{getStatusBadge(agent.status)}</TableCell>
-                    <TableCell>{getSeniorityBadge(agent.created_at)}</TableCell>
-                    <TableCell>{new Date(agent.last_activity || agent.updated_at).toLocaleDateString()}</TableCell>
                     <TableCell>
                       <div className="flex gap-2">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => {
-                            setSelectedAgent(agent);
+                            setSelectedSalesAgent(agent);
                             setIsEditDialogOpen(true);
                           }}
                         >
@@ -566,14 +492,14 @@ export const AgentManagement = () => {
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>
-                              <AlertDialogTitle>Deactivate Agent</AlertDialogTitle>
+                              <AlertDialogTitle>Deactivate Sales Agent</AlertDialogTitle>
                               <AlertDialogDescription>
                                 Are you sure you want to deactivate {agent.agent_name}? This action can be reversed later.
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                               <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => deactivateAgent(agent.id, agent.agent_name)}>
+                              <AlertDialogAction onClick={() => deactivateSalesAgent(agent.id, agent.agent_name)}>
                                 Deactivate
                               </AlertDialogAction>
                             </AlertDialogFooter>
@@ -587,44 +513,53 @@ export const AgentManagement = () => {
             </Table>
           )}
 
-          {!loading && filteredAgents.length === 0 && (
+          {!loading && filteredSalesAgents.length === 0 && (
             <div className="text-center py-8 text-muted-foreground">
-              No agents found matching the current filters.
+              No sales agents found matching the current filters.
             </div>
           )}
         </CardContent>
       </Card>
 
-      {/* Edit Agent Dialog */}
+      {/* Edit Sales Agent Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Edit Agent Information</DialogTitle>
+            <DialogTitle>Edit Sales Agent Information</DialogTitle>
           </DialogHeader>
-          {selectedAgent && (
+          {selectedSalesAgent && (
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="edit-name">Agent Name</Label>
                   <Input
                     id="edit-name"
-                    value={selectedAgent.agent_name}
-                    onChange={(e) => setSelectedAgent(prev => prev ? { ...prev, agent_name: e.target.value } : null)}
+                    value={selectedSalesAgent.agent_name}
+                    onChange={(e) => setSelectedSalesAgent(prev => prev ? { ...prev, agent_name: e.target.value } : null)}
                   />
                 </div>
                 <div>
                   <Label htmlFor="edit-phone">Phone Number</Label>
                   <Input
                     id="edit-phone"
-                    value={selectedAgent.phone_number}
-                    onChange={(e) => setSelectedAgent(prev => prev ? { ...prev, phone_number: e.target.value } : null)}
+                    value={selectedSalesAgent.phone_number}
+                    onChange={(e) => setSelectedSalesAgent(prev => prev ? { ...prev, phone_number: e.target.value } : null)}
                   />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="edit-region">Region/Territory</Label>
-                  <Select value={selectedAgent.region} onValueChange={(value) => setSelectedAgent(prev => prev ? { ...prev, region: value } : null)}>
+                  <Label htmlFor="edit-email">Email</Label>
+                  <Input
+                    id="edit-email"
+                    type="email"
+                    value={selectedSalesAgent.email || ''}
+                    onChange={(e) => setSelectedSalesAgent(prev => prev ? { ...prev, email: e.target.value } : null)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="edit-region">Region</Label>
+                  <Select value={selectedSalesAgent.region} onValueChange={(value) => setSelectedSalesAgent(prev => prev ? { ...prev, region: value } : null)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -634,13 +569,35 @@ export const AgentManagement = () => {
                       <SelectItem value="bukavu">Bukavu</SelectItem>
                       <SelectItem value="urban">Urban Zones</SelectItem>
                       <SelectItem value="rural">Rural Zones</SelectItem>
-                      <SelectItem value="east_coast">East Coast</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="edit-commission">Commission Rate (%)</Label>
+                  <Input
+                    id="edit-commission"
+                    type="number"
+                    step="0.01"
+                    max="1"
+                    min="0"
+                    value={(selectedSalesAgent.commission_rate * 100).toFixed(2)}
+                    onChange={(e) => setSelectedSalesAgent(prev => prev ? { ...prev, commission_rate: Number(e.target.value) / 100 } : null)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="edit-quota">Target Quota ($)</Label>
+                  <Input
+                    id="edit-quota"
+                    type="number"
+                    value={selectedSalesAgent.target_quota}
+                    onChange={(e) => setSelectedSalesAgent(prev => prev ? { ...prev, target_quota: Number(e.target.value) } : null)}
+                  />
+                </div>
                 <div>
                   <Label htmlFor="edit-status">Status</Label>
-                  <Select value={selectedAgent.status} onValueChange={(value) => setSelectedAgent(prev => prev ? { ...prev, status: value } : null)}>
+                  <Select value={selectedSalesAgent.status} onValueChange={(value) => setSelectedSalesAgent(prev => prev ? { ...prev, status: value } : null)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -653,19 +610,11 @@ export const AgentManagement = () => {
                   </Select>
                 </div>
               </div>
-              <div>
-                <Label htmlFor="edit-supervisor">Supervisor</Label>
-                <Input
-                  id="edit-supervisor"
-                  value={selectedAgent.supervisor}
-                  onChange={(e) => setSelectedAgent(prev => prev ? { ...prev, supervisor: e.target.value } : null)}
-                />
-              </div>
             </div>
           )}
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>Cancel</Button>
-            <Button onClick={updateAgent}>Update Agent</Button>
+            <Button onClick={updateSalesAgent}>Update Sales Agent</Button>
           </div>
         </DialogContent>
       </Dialog>

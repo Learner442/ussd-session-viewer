@@ -572,6 +572,65 @@ export type Database = {
         }
         Relationships: []
       }
+      sales_agent_commissions: {
+        Row: {
+          calculation_period_end: string
+          calculation_period_start: string
+          created_at: string
+          id: string
+          is_paid: boolean | null
+          paid_date: string | null
+          performance_bonus: number | null
+          sales_agent_commission: number | null
+          sales_agent_id: string
+          supervised_agents_count: number | null
+          total_agent_commissions: number | null
+          total_agent_revenue: number | null
+          total_earning: number | null
+          updated_at: string
+        }
+        Insert: {
+          calculation_period_end: string
+          calculation_period_start: string
+          created_at?: string
+          id?: string
+          is_paid?: boolean | null
+          paid_date?: string | null
+          performance_bonus?: number | null
+          sales_agent_commission?: number | null
+          sales_agent_id: string
+          supervised_agents_count?: number | null
+          total_agent_commissions?: number | null
+          total_agent_revenue?: number | null
+          total_earning?: number | null
+          updated_at?: string
+        }
+        Update: {
+          calculation_period_end?: string
+          calculation_period_start?: string
+          created_at?: string
+          id?: string
+          is_paid?: boolean | null
+          paid_date?: string | null
+          performance_bonus?: number | null
+          sales_agent_commission?: number | null
+          sales_agent_id?: string
+          supervised_agents_count?: number | null
+          total_agent_commissions?: number | null
+          total_agent_revenue?: number | null
+          total_earning?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_agent_commissions_sales_agent_id_fkey"
+            columns: ["sales_agent_id"]
+            isOneToOne: false
+            referencedRelation: "sales_agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sales_agent_wallets: {
         Row: {
           balance: number | null

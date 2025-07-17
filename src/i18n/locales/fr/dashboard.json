@@ -17,7 +17,8 @@
     "agentManagement": "Gestion des agents",
     "salesAgentModule": "Module agent de vente",
     "ratesConfiguration": "Configuration des tarifs",
-    "fxConfiguration": "Configuration FX"
+    "fxConfiguration": "Configuration FX",
+    "ussdConfiguration": "Configuration USSD"
   },
   "filters": {
     "title": "Options de filtre",

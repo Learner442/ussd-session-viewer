@@ -25,6 +25,7 @@ import { RatesConfiguration } from "./RatesConfiguration";
 import { FXConfiguration } from "./FXConfiguration";
 import { AgentManagement } from "./AgentManagement";
 import { SalesAgentModule } from "./SalesAgentModule";
+import { USSDConfiguration } from "./USSDConfiguration";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
 

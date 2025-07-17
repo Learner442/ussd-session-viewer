@@ -17,7 +17,8 @@
     "agentManagement": "Agent Management",
     "salesAgentModule": "Sales Agent Module",
     "ratesConfiguration": "Rates Configuration",
-    "fxConfiguration": "FX Configuration"
+    "fxConfiguration": "FX Configuration",
+    "ussdConfiguration": "USSD Configuration"
   },
   "filters": {
     "title": "Filter Options",

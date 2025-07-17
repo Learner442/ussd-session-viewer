@@ -572,6 +572,36 @@ export type Database = {
         }
         Relationships: []
       }
+      mnos: {
+        Row: {
+          country: string | null
+          created_at: string
+          id: string
+          is_active: boolean | null
+          mno_code: string
+          mno_name: string
+          updated_at: string
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          mno_code: string
+          mno_name: string
+          updated_at?: string
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          mno_code?: string
+          mno_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       sales_agent_commissions: {
         Row: {
           calculation_period_end: string
@@ -983,6 +1013,283 @@ export type Database = {
           status?: string
           user_agent?: string | null
           user_phone?: string
+        }
+        Relationships: []
+      }
+      ussd_flow_history: {
+        Row: {
+          action: string
+          changes_description: string | null
+          flow_id: string | null
+          id: string
+          new_version: number | null
+          old_version: number | null
+          performed_at: string
+          performed_by: string | null
+        }
+        Insert: {
+          action: string
+          changes_description?: string | null
+          flow_id?: string | null
+          id?: string
+          new_version?: number | null
+          old_version?: number | null
+          performed_at?: string
+          performed_by?: string | null
+        }
+        Update: {
+          action?: string
+          changes_description?: string | null
+          flow_id?: string | null
+          id?: string
+          new_version?: number | null
+          old_version?: number | null
+          performed_at?: string
+          performed_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ussd_flow_history_flow_id_fkey"
+            columns: ["flow_id"]
+            isOneToOne: false
+            referencedRelation: "ussd_menu_flows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ussd_flow_mno_mapping: {
+        Row: {
+          created_at: string
+          flow_id: string | null
+          id: string
+          is_active: boolean | null
+          mno_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          flow_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          mno_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          flow_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          mno_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ussd_flow_mno_mapping_flow_id_fkey"
+            columns: ["flow_id"]
+            isOneToOne: false
+            referencedRelation: "ussd_menu_flows"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ussd_flow_mno_mapping_mno_id_fkey"
+            columns: ["mno_id"]
+            isOneToOne: false
+            referencedRelation: "mnos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ussd_menu_flows: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          flow_name: string
+          id: string
+          is_active: boolean | null
+          is_published: boolean | null
+          language: string | null
+          scheduled_publish_at: string | null
+          service_id: string | null
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          flow_name: string
+          id?: string
+          is_active?: boolean | null
+          is_published?: boolean | null
+          language?: string | null
+          scheduled_publish_at?: string | null
+          service_id?: string | null
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          flow_name?: string
+          id?: string
+          is_active?: boolean | null
+          is_published?: boolean | null
+          language?: string | null
+          scheduled_publish_at?: string | null
+          service_id?: string | null
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ussd_menu_flows_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "ussd_services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ussd_menu_options: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean | null
+          next_step_id: string | null
+          option_number: number
+          option_text: string
+          option_value: string | null
+          step_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          next_step_id?: string | null
+          option_number: number
+          option_text: string
+          option_value?: string | null
+          step_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          next_step_id?: string | null
+          option_number?: number
+          option_text?: string
+          option_value?: string | null
+          step_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ussd_menu_options_next_step_id_fkey"
+            columns: ["next_step_id"]
+            isOneToOne: false
+            referencedRelation: "ussd_menu_steps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ussd_menu_options_step_id_fkey"
+            columns: ["step_id"]
+            isOneToOne: false
+            referencedRelation: "ussd_menu_steps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ussd_menu_steps: {
+        Row: {
+          api_endpoint: string | null
+          created_at: string
+          fallback_message: string | null
+          flow_id: string | null
+          id: string
+          is_initial_step: boolean | null
+          menu_text: string
+          parent_step_id: string | null
+          response_type: string
+          step_name: string
+          step_number: number
+          timeout_seconds: number | null
+          updated_at: string
+        }
+        Insert: {
+          api_endpoint?: string | null
+          created_at?: string
+          fallback_message?: string | null
+          flow_id?: string | null
+          id?: string
+          is_initial_step?: boolean | null
+          menu_text: string
+          parent_step_id?: string | null
+          response_type: string
+          step_name: string
+          step_number: number
+          timeout_seconds?: number | null
+          updated_at?: string
+        }
+        Update: {
+          api_endpoint?: string | null
+          created_at?: string
+          fallback_message?: string | null
+          flow_id?: string | null
+          id?: string
+          is_initial_step?: boolean | null
+          menu_text?: string
+          parent_step_id?: string | null
+          response_type?: string
+          step_name?: string
+          step_number?: number
+          timeout_seconds?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ussd_menu_steps_flow_id_fkey"
+            columns: ["flow_id"]
+            isOneToOne: false
+            referencedRelation: "ussd_menu_flows"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ussd_menu_steps_parent_step_id_fkey"
+            columns: ["parent_step_id"]
+            isOneToOne: false
+            referencedRelation: "ussd_menu_steps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ussd_services: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          service_code: string
+          service_name: string
+          service_type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          service_code: string
+          service_name: string
+          service_type: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          service_code?: string
+          service_name?: string
+          service_type?: string
+          updated_at?: string
         }
         Relationships: []
       }

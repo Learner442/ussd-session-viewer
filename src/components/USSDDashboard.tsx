@@ -26,6 +26,7 @@ import { FXConfiguration } from "./FXConfiguration";
 import { AgentManagement } from "./AgentManagement";
 import { SalesAgentModule } from "./SalesAgentModule";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { ThemeToggle } from "./ThemeToggle";
 
 function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveTab: (tab: string) => void }) {
   const { t } = useTranslation('dashboard');
@@ -220,6 +221,7 @@ export function USSDDashboard() {
             </div>
             
             <div className="flex items-center space-x-4">
+              <ThemeToggle />
               <LanguageSwitcher />
               <div className="flex items-center space-x-2">
                 <div className="w-3 h-3 bg-status-active rounded-full animate-pulse"></div>

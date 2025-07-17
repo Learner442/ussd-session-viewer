@@ -177,10 +177,21 @@ export const CommissionCalculator = () => {
       const endDate = new Date();
       endDate.setMonth(endDate.getMonth() + 1, 0); // Last day of month
 
+      // First, get the agent's actual ID from agent_id field
+      const { data: agent, error: agentError } = await supabase
+        .from('agents')
+        .select('id')
+        .eq('agent_id', agentCommission.agent_id)
+        .single();
+
+      if (agentError || !agent) {
+        throw new Error(`Agent not found: ${agentCommission.agent_id}`);
+      }
+
       const { error } = await supabase
         .from('agent_commissions')
         .insert({
-          agent_id: agentCommission.agent_id,
+          agent_id: agent.id, // Use the UUID from the agents table
           calculation_period_start: startDate.toISOString().split('T')[0],
           calculation_period_end: endDate.toISOString().split('T')[0],
           active_users_count: agentCommission.active_users,

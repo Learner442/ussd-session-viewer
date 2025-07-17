@@ -51,23 +51,35 @@ export const AgentPerformanceTable: React.FC<AgentPerformanceTableProps> = ({ fi
       const { data: agentsData, error: agentsError } = await supabase
         .from('agents')
         .select(`
-          *,
-          agent_recruited_users(count),
-          agent_user_sessions(count),
-          agent_user_transactions(count, revenue_generated),
-          agent_user_sms(count),
-          agent_commissions(total_commission)
+          *
         `);
 
       if (agentsError) throw agentsError;
 
+      // Load related data separately to avoid aggregation issues
+      const agentIds = agentsData?.map(agent => agent.id) || [];
+      
+      const [recruitedUsers, sessions, transactions, sms, commissions] = await Promise.all([
+        supabase.from('agent_recruited_users').select('agent_id').in('agent_id', agentIds),
+        supabase.from('agent_user_sessions').select('agent_id').in('agent_id', agentIds),
+        supabase.from('agent_user_transactions').select('agent_id, revenue_generated').in('agent_id', agentIds),
+        supabase.from('agent_user_sms').select('agent_id, sms_count').in('agent_id', agentIds),
+        supabase.from('agent_commissions').select('agent_id, total_commission').in('agent_id', agentIds)
+      ]);
+
       // Transform data to match the required format
       const performanceData: AgentPerformance[] = agentsData?.map(agent => {
-        const totalUsers = agent.agent_recruited_users?.length || 0;
-        const activeSessions = agent.agent_user_sessions?.length || 0;
-        const transactions = agent.agent_user_transactions || [];
-        const totalRevenue = transactions.reduce((sum: number, t: any) => sum + (Number(t.revenue_generated) || 0), 0);
-        const totalCommission = agent.agent_commissions?.reduce((sum: any, c: any) => sum + (Number(c.total_commission) || 0), 0) || 0;
+        const agentRecruitedUsers = recruitedUsers.data?.filter(u => u.agent_id === agent.id) || [];
+        const agentSessions = sessions.data?.filter(s => s.agent_id === agent.id) || [];
+        const agentTransactions = transactions.data?.filter(t => t.agent_id === agent.id) || [];
+        const agentSms = sms.data?.filter(s => s.agent_id === agent.id) || [];
+        const agentCommissions = commissions.data?.filter(c => c.agent_id === agent.id) || [];
+        
+        const totalUsers = agentRecruitedUsers.length;
+        const activeSessions = agentSessions.length;
+        const totalRevenue = agentTransactions.reduce((sum, t) => sum + (Number(t.revenue_generated) || 0), 0);
+        const totalSms = agentSms.reduce((sum, s) => sum + (Number(s.sms_count) || 0), 0);
+        const totalCommission = agentCommissions.reduce((sum, c) => sum + (Number(c.total_commission) || 0), 0);
         
         return {
           id: agent.id,
@@ -77,8 +89,8 @@ export const AgentPerformanceTable: React.FC<AgentPerformanceTableProps> = ({ fi
           total_users_registered: totalUsers,
           active_users: Math.floor(totalUsers * 0.8), // Simulated active users (80% retention)
           sessions_generated: activeSessions,
-          transactions_made: transactions.length,
-          sms_sent: agent.agent_user_sms?.length || 0,
+          transactions_made: agentTransactions.length,
+          sms_sent: totalSms,
           revenue_generated: totalRevenue,
           commission_owed: totalCommission,
           conversion_rate: totalUsers > 0 ? Math.round((Math.floor(totalUsers * 0.8) / totalUsers) * 100) : 0,

@@ -556,6 +556,14 @@ export function MenuBuilder({ selectedFlowId }: MenuBuilderProps) {
                       size="sm"
                       onClick={() => {
                         setSelectedStepId(step.id);
+                        setEditingOption(null);
+                        setOptionFormData({
+                          option_number: 1,
+                          option_text: "",
+                          option_value: "",
+                          next_step_id: "end",
+                          is_active: true
+                        });
                         setIsOptionDialogOpen(true);
                       }}
                     >

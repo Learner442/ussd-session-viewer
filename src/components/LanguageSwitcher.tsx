@@ -8,7 +8,9 @@ export const LanguageSwitcher = () => {
   const { i18n, t } = useTranslation();
 
   const changeLanguage = (language: string) => {
+    console.log('Changing language to:', language);
     i18n.changeLanguage(language);
+    console.log('Current language after change:', i18n.language);
   };
 
   return (
@@ -37,7 +39,9 @@ export const LanguageToggle = () => {
 
   const toggleLanguage = () => {
     const newLanguage = i18n.language === 'en' ? 'fr' : 'en';
+    console.log('Toggling language from', i18n.language, 'to', newLanguage);
     i18n.changeLanguage(newLanguage);
+    console.log('Language toggled to:', i18n.language);
   };
 
   return (

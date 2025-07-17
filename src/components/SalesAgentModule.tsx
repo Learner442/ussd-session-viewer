@@ -35,7 +35,7 @@ interface FilterState {
 }
 
 export const SalesAgentModule = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { toast } = useToast();
   const [metrics, setMetrics] = useState<SalesMetrics>({
     totalAgents: 0,
@@ -131,6 +131,10 @@ export const SalesAgentModule = () => {
           <p className="text-muted-foreground mt-1">
             {t('salesAgent.subtitle')}
           </p>
+          {/* Debug info */}
+          <div className="text-xs text-muted-foreground mt-1">
+            Current language: {i18n.language} | Test translation: {t('common.loading')}
+          </div>
         </div>
         <div className="flex gap-2">
           <LanguageSwitcher />

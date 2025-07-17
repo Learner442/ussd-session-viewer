@@ -41,5 +41,28 @@
     "businessName": "Business Name",
     "businessType": "Business Type",
     "businessAddress": "Business Address"
+  },
+  "monitoring": {
+    "title": "Agent Monitoring",
+    "searchPlaceholder": "Search agents...",
+    "allRegions": "All Regions",
+    "allStatuses": "All Statuses",
+    "noAgentsFound": "No agents found",
+    "viewProfile": "View Profile",
+    "lastActivity": "Last Activity",
+    "totalTransactions": "Total Transactions",
+    "thisMonth": "This Month"
+  },
+  "profile": {
+    "title": "Agent Profile",
+    "personalDetails": "Personal Details",
+    "businessDetails": "Business Details",
+    "walletInfo": "Wallet Information",
+    "performanceMetrics": "Performance Metrics",
+    "recentTransactions": "Recent Transactions",
+    "contactInfo": "Contact Information",
+    "accountStatus": "Account Status",
+    "joiningDate": "Joining Date",
+    "lastLogin": "Last Login"
   }
 }

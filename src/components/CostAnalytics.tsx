@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, TrendingDown, DollarSign, Percent, BarChart3, PieChart } from "lucide-react";
@@ -86,6 +87,7 @@ const mockServiceMetrics: ServiceMetrics[] = [
 ];
 
 export function CostAnalytics() {
+  const { t } = useTranslation('components');
   const getProfitTrendIcon = (margin: number) => {
     return margin > 0 ? (
       <TrendingUp className="h-4 w-4 text-primary" />

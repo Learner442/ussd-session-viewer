@@ -58,6 +58,24 @@
     "description": "Description",
     "amount": "Amount",
     "currency": "Currency",
-    "language": "Language"
+    "language": "Language",
+    "rate": "Rate",
+    "commission": "Commission",
+    "balance": "Balance",
+    "profit": "Profit",
+    "loss": "Loss",
+    "revenue": "Revenue",
+    "cost": "Cost",
+    "margin": "Margin",
+    "percentage": "Percentage",
+    "volume": "Volume",
+    "count": "Count",
+    "average": "Average",
+    "minimum": "Minimum",
+    "maximum": "Maximum",
+    "change": "Change",
+    "trend": "Trend",
+    "growth": "Growth",
+    "decline": "Decline"
   }
 }

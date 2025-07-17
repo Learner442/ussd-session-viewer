@@ -1,0 +1,35 @@
+{
+  "rates": {
+    "title": "Configuration des tarifs",
+    "subtitle": "Gérer les tarifs de service et les structures de prix",
+    "addNewRate": "Ajouter un nouveau tarif",
+    "editRate": "Modifier le tarif",
+    "serviceName": "Nom du service",
+    "rateType": "Type de tarif",
+    "value": "Valeur",
+    "currency": "Devise",
+    "status": "Statut",
+    "lastUpdated": "Dernière mise à jour",
+    "flatRate": "Tarif fixe",
+    "percentage": "Pourcentage",
+    "tiered": "Échelonné",
+    "saveChanges": "Sauvegarder les modifications",
+    "cancelChanges": "Annuler les modifications"
+  },
+  "fx": {
+    "title": "Configuration FX",
+    "subtitle": "Configurer les taux de change et les marges",
+    "baseCurrency": "Devise de base",
+    "targetCurrency": "Devise cible",
+    "buyRate": "Taux d'achat",
+    "sellRate": "Taux de vente",
+    "spread": "Écart",
+    "margin": "Marge",
+    "lastUpdate": "Dernière mise à jour",
+    "autoUpdate": "Mise à jour automatique",
+    "manualUpdate": "Mise à jour manuelle",
+    "rateSource": "Source du taux",
+    "effectiveDate": "Date d'effet",
+    "expiryDate": "Date d'expiration"
+  }
+}

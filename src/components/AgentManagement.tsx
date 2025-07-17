@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Plus, Search, Download, Filter, Users, TrendingUp, AlertTriangle, DollarSign } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ import { AgentProfile } from "./agent/AgentProfile";
 import { AgentMonitoring } from "./agent/AgentMonitoring";
 
 export function AgentManagement() {
+  const { t } = useTranslation('agent');
   const [activeView, setActiveView] = useState<"dashboard" | "profile" | "monitoring">("dashboard");
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
@@ -55,28 +57,28 @@ export function AgentManagement() {
 
   const stats = [
     {
-      title: "Total Agents",
+      title: t('stats.totalAgents'),
       value: "2,847",
       change: "+12.3%",
       icon: Users,
       color: "text-blue-600"
     },
     {
-      title: "Active Today",
+      title: t('stats.activeToday'),
       value: "1,923",
       change: "+5.7%",
       icon: TrendingUp,
       color: "text-green-600"
     },
     {
-      title: "Total Volume",
+      title: t('stats.totalVolume'),
       value: "$234,567",
       change: "+18.2%",
       icon: DollarSign,
       color: "text-purple-600"
     },
     {
-      title: "Alerts",
+      title: t('stats.alerts'),
       value: "47",
       change: "-23.1%",
       icon: AlertTriangle,
@@ -117,7 +119,7 @@ export function AgentManagement() {
                 <span className={stat.change.startsWith("+") ? "text-green-600" : "text-red-600"}>
                   {stat.change}
                 </span>{" "}
-                from last month
+                {t('stats.fromLastMonth')}
               </p>
             </CardContent>
           </Card>
@@ -130,38 +132,38 @@ export function AgentManagement() {
           <DialogTrigger asChild>
             <Button className="flex items-center gap-2">
               <Plus className="h-4 w-4" />
-              Register New Agent
+              {t('management.registerNewAgent')}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Register New Agent</DialogTitle>
+              <DialogTitle>{t('registration.title')}</DialogTitle>
             </DialogHeader>
             <AgentRegistration onBack={handleRegistrationClose} />
           </DialogContent>
         </Dialog>
         <Button variant="outline" onClick={() => setActiveView("monitoring")} className="flex items-center gap-2">
           <Users className="h-4 w-4" />
-          Agent Monitoring
+          {t('management.agentMonitoring')}
         </Button>
         <Button variant="outline" className="flex items-center gap-2">
           <Download className="h-4 w-4" />
-          Export Reports
+          {t('management.exportReports')}
         </Button>
       </div>
 
       {/* Quick Actions */}
       <Card>
         <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
-          <CardDescription>Manage agent operations efficiently</CardDescription>
+          <CardTitle>{t('quickActions.title')}</CardTitle>
+          <CardDescription>{t('quickActions.subtitle')}</CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="recent" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="recent">Recent Activity</TabsTrigger>
-              <TabsTrigger value="alerts">Alerts</TabsTrigger>
-              <TabsTrigger value="performance">Top Performers</TabsTrigger>
+              <TabsTrigger value="recent">{t('quickActions.recentActivity')}</TabsTrigger>
+              <TabsTrigger value="alerts">{t('quickActions.alerts')}</TabsTrigger>
+              <TabsTrigger value="performance">{t('quickActions.topPerformers')}</TabsTrigger>
             </TabsList>
             
             <TabsContent value="recent" className="space-y-4">
@@ -267,9 +269,9 @@ export function AgentManagement() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Agent Management</h1>
+          <h1 className="text-3xl font-bold">{t('management.title')}</h1>
           <p className="text-muted-foreground">
-            Register, monitor, and manage field agents across all regions
+            {t('management.subtitle')}
           </p>
         </div>
       </div>

@@ -58,6 +58,24 @@
     "description": "Description",
     "amount": "Montant",
     "currency": "Devise",
-    "language": "Langue"
+    "language": "Langue",
+    "rate": "Taux",
+    "commission": "Commission",
+    "balance": "Solde",
+    "profit": "Bénéfice",
+    "loss": "Perte",
+    "revenue": "Revenus",
+    "cost": "Coût",
+    "margin": "Marge",
+    "percentage": "Pourcentage",
+    "volume": "Volume",
+    "count": "Nombre",
+    "average": "Moyenne",
+    "minimum": "Minimum",
+    "maximum": "Maximum",
+    "change": "Changement",
+    "trend": "Tendance",
+    "growth": "Croissance",
+    "decline": "Déclin"
   }
 }

@@ -1,0 +1,35 @@
+{
+  "rates": {
+    "title": "Rates Configuration",
+    "subtitle": "Manage service rates and pricing structures",
+    "addNewRate": "Add New Rate",
+    "editRate": "Edit Rate",
+    "serviceName": "Service Name",
+    "rateType": "Rate Type",
+    "value": "Value",
+    "currency": "Currency",
+    "status": "Status",
+    "lastUpdated": "Last Updated",
+    "flatRate": "Flat Rate",
+    "percentage": "Percentage",
+    "tiered": "Tiered",
+    "saveChanges": "Save Changes",
+    "cancelChanges": "Cancel Changes"
+  },
+  "fx": {
+    "title": "FX Configuration",
+    "subtitle": "Configure foreign exchange rates and margins",
+    "baseCurrency": "Base Currency",
+    "targetCurrency": "Target Currency",
+    "buyRate": "Buy Rate",
+    "sellRate": "Sell Rate",
+    "spread": "Spread",
+    "margin": "Margin",
+    "lastUpdate": "Last Update",
+    "autoUpdate": "Auto Update",
+    "manualUpdate": "Manual Update",
+    "rateSource": "Rate Source",
+    "effectiveDate": "Effective Date",
+    "expiryDate": "Expiry Date"
+  }
+}

@@ -9,6 +9,8 @@ import enAuth from './locales/en/auth.json';
 import enAgent from './locales/en/agent.json';
 import enSales from './locales/en/sales.json';
 import enReports from './locales/en/reports.json';
+import enComponents from './locales/en/components.json';
+import enConfig from './locales/en/config.json';
 
 import frCommon from './locales/fr/common.json';
 import frDashboard from './locales/fr/dashboard.json';
@@ -16,6 +18,8 @@ import frAuth from './locales/fr/auth.json';
 import frAgent from './locales/fr/agent.json';
 import frSales from './locales/fr/sales.json';
 import frReports from './locales/fr/reports.json';
+import frComponents from './locales/fr/components.json';
+import frConfig from './locales/fr/config.json';
 
 const resources = {
   en: {
@@ -25,6 +29,8 @@ const resources = {
     agent: enAgent,
     sales: enSales,
     reports: enReports,
+    components: enComponents,
+    config: enConfig,
   },
   fr: {
     common: frCommon,
@@ -33,6 +39,8 @@ const resources = {
     agent: frAgent,
     sales: frSales,
     reports: frReports,
+    components: frComponents,
+    config: frConfig,
   },
 };
 

@@ -415,6 +415,468 @@ export type Database = {
         }
         Relationships: []
       }
+      cost_categories: {
+        Row: {
+          category_name: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+        }
+        Insert: {
+          category_name: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+        }
+        Update: {
+          category_name?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+        }
+        Relationships: []
+      }
+      cost_entries: {
+        Row: {
+          agent_id: string | null
+          amount: number
+          category_id: string
+          cost_date: string
+          cost_type: string
+          created_at: string
+          created_by: string | null
+          description: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          agent_id?: string | null
+          amount: number
+          category_id: string
+          cost_date: string
+          cost_type: string
+          created_at?: string
+          created_by?: string | null
+          description: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string | null
+          amount?: number
+          category_id?: string
+          cost_date?: string
+          cost_type?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cost_entries_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cost_entries_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "cost_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fx_rate_history: {
+        Row: {
+          changed_at: string
+          changed_by: string | null
+          fx_rate_id: string
+          id: string
+          new_rate: number
+          old_rate: number
+        }
+        Insert: {
+          changed_at?: string
+          changed_by?: string | null
+          fx_rate_id: string
+          id?: string
+          new_rate: number
+          old_rate: number
+        }
+        Update: {
+          changed_at?: string
+          changed_by?: string | null
+          fx_rate_id?: string
+          id?: string
+          new_rate?: number
+          old_rate?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fx_rate_history_fx_rate_id_fkey"
+            columns: ["fx_rate_id"]
+            isOneToOne: false
+            referencedRelation: "fx_rates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fx_rates: {
+        Row: {
+          created_at: string
+          effective_date: string
+          from_currency: string
+          id: string
+          is_active: boolean | null
+          rate: number
+          to_currency: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          effective_date?: string
+          from_currency: string
+          id?: string
+          is_active?: boolean | null
+          rate: number
+          to_currency: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          effective_date?: string
+          from_currency?: string
+          id?: string
+          is_active?: boolean | null
+          rate?: number
+          to_currency?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      service_rates: {
+        Row: {
+          created_at: string
+          currency: string | null
+          effective_date: string
+          id: string
+          is_active: boolean | null
+          max_amount: number | null
+          min_amount: number | null
+          rate_type: string
+          rate_value: number
+          service_name: string
+          service_type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string | null
+          effective_date?: string
+          id?: string
+          is_active?: boolean | null
+          max_amount?: number | null
+          min_amount?: number | null
+          rate_type: string
+          rate_value: number
+          service_name: string
+          service_type: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string | null
+          effective_date?: string
+          id?: string
+          is_active?: boolean | null
+          max_amount?: number | null
+          min_amount?: number | null
+          rate_type?: string
+          rate_value?: number
+          service_name?: string
+          service_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      sms_logs: {
+        Row: {
+          agent_id: string | null
+          cost: number | null
+          created_at: string
+          delivered_at: string | null
+          id: string
+          message_content: string
+          message_type: string
+          phone_number: string
+          provider: string | null
+          sent_at: string
+          status: string
+          transaction_id: string | null
+        }
+        Insert: {
+          agent_id?: string | null
+          cost?: number | null
+          created_at?: string
+          delivered_at?: string | null
+          id?: string
+          message_content: string
+          message_type: string
+          phone_number: string
+          provider?: string | null
+          sent_at?: string
+          status?: string
+          transaction_id?: string | null
+        }
+        Update: {
+          agent_id?: string | null
+          cost?: number | null
+          created_at?: string
+          delivered_at?: string | null
+          id?: string
+          message_content?: string
+          message_type?: string
+          phone_number?: string
+          provider?: string | null
+          sent_at?: string
+          status?: string
+          transaction_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sms_logs_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sms_logs_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transactions: {
+        Row: {
+          agent_id: string | null
+          amount: number
+          completed_at: string | null
+          created_at: string
+          currency: string | null
+          failure_reason: string | null
+          fee: number | null
+          id: string
+          metadata: Json | null
+          status: string
+          transaction_id: string
+          transaction_type: string
+          user_phone: string
+          ussd_session_id: string | null
+        }
+        Insert: {
+          agent_id?: string | null
+          amount: number
+          completed_at?: string | null
+          created_at?: string
+          currency?: string | null
+          failure_reason?: string | null
+          fee?: number | null
+          id?: string
+          metadata?: Json | null
+          status?: string
+          transaction_id: string
+          transaction_type: string
+          user_phone: string
+          ussd_session_id?: string | null
+        }
+        Update: {
+          agent_id?: string | null
+          amount?: number
+          completed_at?: string | null
+          created_at?: string
+          currency?: string | null
+          failure_reason?: string | null
+          fee?: number | null
+          id?: string
+          metadata?: Json | null
+          status?: string
+          transaction_id?: string
+          transaction_type?: string
+          user_phone?: string
+          ussd_session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_ussd_session_id_fkey"
+            columns: ["ussd_session_id"]
+            isOneToOne: false
+            referencedRelation: "ussd_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_profiles: {
+        Row: {
+          agent_id: string | null
+          created_at: string
+          id: string
+          kyc_status: string | null
+          last_activity_date: string | null
+          metadata: Json | null
+          phone_number: string
+          registration_date: string
+          status: string
+          updated_at: string
+          user_type: string
+        }
+        Insert: {
+          agent_id?: string | null
+          created_at?: string
+          id?: string
+          kyc_status?: string | null
+          last_activity_date?: string | null
+          metadata?: Json | null
+          phone_number: string
+          registration_date?: string
+          status?: string
+          updated_at?: string
+          user_type: string
+        }
+        Update: {
+          agent_id?: string | null
+          created_at?: string
+          id?: string
+          kyc_status?: string | null
+          last_activity_date?: string | null
+          metadata?: Json | null
+          phone_number?: string
+          registration_date?: string
+          status?: string
+          updated_at?: string
+          user_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_profiles_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_sessions: {
+        Row: {
+          created_at: string
+          duration: number | null
+          end_time: string | null
+          id: string
+          ip_address: unknown | null
+          session_type: string
+          start_time: string
+          status: string
+          user_agent: string | null
+          user_phone: string
+        }
+        Insert: {
+          created_at?: string
+          duration?: number | null
+          end_time?: string | null
+          id?: string
+          ip_address?: unknown | null
+          session_type: string
+          start_time?: string
+          status?: string
+          user_agent?: string | null
+          user_phone: string
+        }
+        Update: {
+          created_at?: string
+          duration?: number | null
+          end_time?: string | null
+          id?: string
+          ip_address?: unknown | null
+          session_type?: string
+          start_time?: string
+          status?: string
+          user_agent?: string | null
+          user_phone?: string
+        }
+        Relationships: []
+      }
+      ussd_sessions: {
+        Row: {
+          agent_id: string | null
+          completed_at: string | null
+          created_at: string
+          id: string
+          phone_number: string
+          revenue_generated: number | null
+          service_code: string
+          session_duration: number | null
+          session_id: string
+          session_status: string
+          session_text: string | null
+          steps_count: number | null
+          updated_at: string
+        }
+        Insert: {
+          agent_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          phone_number: string
+          revenue_generated?: number | null
+          service_code: string
+          session_duration?: number | null
+          session_id: string
+          session_status?: string
+          session_text?: string | null
+          steps_count?: number | null
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          phone_number?: string
+          revenue_generated?: number | null
+          service_code?: string
+          session_duration?: number | null
+          session_id?: string
+          session_status?: string
+          session_text?: string | null
+          steps_count?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ussd_sessions_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

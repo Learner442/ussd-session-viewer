@@ -1,0 +1,40 @@
+{
+  "title": "Tableau de bord DAPAY",
+  "subtitle": "Plateforme de gestion des paiements numériques",
+  "status": {
+    "live": "En direct"
+  },
+  "menu": {
+    "home": "Accueil",
+    "reports": "Rapports",
+    "agents": "Agents", 
+    "configuration": "Configuration",
+    "ussdSessions": "Sessions USSD",
+    "sms": "SMS",
+    "costAnalysis": "Analyse des coûts",
+    "userMetrics": "Métriques utilisateur",
+    "transactions": "Transactions",
+    "agentManagement": "Gestion des agents",
+    "salesAgentModule": "Module agent de vente",
+    "ratesConfiguration": "Configuration des tarifs",
+    "fxConfiguration": "Configuration FX"
+  },
+  "filters": {
+    "title": "Options de filtre",
+    "mno": "MNO",
+    "allMnos": "Tous les MNO",
+    "serviceType": "Type de service",
+    "allServices": "Tous les services",
+    "timePeriod": "Période",
+    "daily": "Quotidien",
+    "weekly": "Hebdomadaire", 
+    "monthly": "Mensuel",
+    "region": "Région",
+    "allRegions": "Toutes les régions",
+    "volume": "Volume",
+    "allSessions": "Toutes les sessions",
+    "highVolume": "Volume élevé",
+    "mediumVolume": "Volume moyen",
+    "lowVolume": "Volume faible"
+  }
+}

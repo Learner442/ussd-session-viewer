@@ -1,0 +1,54 @@
+{
+  "sessionReport": {
+    "title": "Session Report",
+    "export": "Export",
+    "filters": "Filters"
+  },
+  "metrics": {
+    "totalSessions": "Total Sessions",
+    "conversionRate": "Conversion Rate",
+    "dropRate": "Drop Rate",
+    "avgSessionCost": "Avg Session Cost"
+  },
+  "charts": {
+    "sessionsByMno": "Sessions by MNO",
+    "serviceDistribution": "Service Distribution",
+    "sessionTrends": "Session Trends",
+    "completionRate": "Completion Rate",
+    "hourlySessionVolume": "Hourly session volume trends",
+    "dailyCompletionVsDrop": "Daily completion vs drop rates"
+  },
+  "services": {
+    "airtime": "Airtime",
+    "data": "Data",
+    "billPayment": "Bill Payment",
+    "transfer": "Transfer",
+    "other": "Other"
+  },
+  "mnos": {
+    "airtel": "Airtel",
+    "mtn": "MTN",
+    "9mobile": "9Mobile",
+    "glo": "Glo"
+  },
+  "performance": {
+    "topServicesByCompletion": "Top Services by Completion Rate",
+    "service": "SERVICE",
+    "totalSessions": "TOTAL SESSIONS",
+    "completed": "COMPLETED",
+    "completionRate": "COMPLETION RATE",
+    "revenue": "REVENUE"
+  },
+  "regional": {
+    "title": "Regional Performance",
+    "successRate": "Success Rate:"
+  },
+  "export": {
+    "title": "Export Options",
+    "pdf": "PDF",
+    "excel": "Excel",
+    "csv": "CSV",
+    "emailSummary": "Email Summary",
+    "dashboardExport": "Dashboard Export"
+  }
+}

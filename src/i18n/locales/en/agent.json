@@ -1,0 +1,45 @@
+{
+  "management": {
+    "title": "Agent Management",
+    "subtitle": "Register, monitor, and manage field agents across all regions",
+    "registerNewAgent": "Register New Agent",
+    "agentMonitoring": "Agent Monitoring",
+    "exportReports": "Export Reports"
+  },
+  "stats": {
+    "totalAgents": "Total Agents",
+    "activeToday": "Active Today",
+    "totalVolume": "Total Volume",
+    "alerts": "Alerts",
+    "fromLastMonth": "from last month"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "subtitle": "Manage agent operations efficiently",
+    "recentActivity": "Recent Activity",
+    "alerts": "Alerts",
+    "topPerformers": "Top Performers"
+  },
+  "profile": {
+    "agentId": "Agent ID",
+    "agentName": "Agent Name",
+    "region": "Region",
+    "status": "Status",
+    "commission": "Commission",
+    "sales": "Sales"
+  },
+  "registration": {
+    "title": "Register New Agent",
+    "personalInfo": "Personal Information",
+    "businessInfo": "Business Information",
+    "accountSetup": "Account Setup",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "phoneNumber": "Phone Number",
+    "email": "Email",
+    "address": "Address",
+    "businessName": "Business Name",
+    "businessType": "Business Type",
+    "businessAddress": "Business Address"
+  }
+}

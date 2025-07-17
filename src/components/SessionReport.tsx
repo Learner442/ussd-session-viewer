@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -39,22 +40,24 @@ const completionRate = [
 ];
 
 export function SessionReport() {
+  const { t } = useTranslation('reports');
+  
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <BarChart className="h-6 w-6" />
-          <h2 className="text-2xl font-bold">Session Report</h2>
+          <h2 className="text-2xl font-bold">{t('sessionReport.title')}</h2>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
-            Export
+            {t('sessionReport.export')}
           </Button>
           <Button variant="default" size="sm">
             <Filter className="h-4 w-4 mr-2" />
-            Filters
+            {t('sessionReport.filters')}
           </Button>
         </div>
       </div>
@@ -62,37 +65,37 @@ export function SessionReport() {
       {/* Filter Options */}
       <Card>
         <CardHeader>
-          <CardTitle>Filter Options</CardTitle>
+          <CardTitle>{t('filters.title', { ns: 'dashboard' })}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             <div>
-              <label className="text-sm font-medium mb-2 block">MNO</label>
+              <label className="text-sm font-medium mb-2 block">{t('filters.mno', { ns: 'dashboard' })}</label>
               <Select defaultValue="all">
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All MNOs</SelectItem>
-                  <SelectItem value="airtel">Airtel</SelectItem>
-                  <SelectItem value="mtn">MTN</SelectItem>
-                  <SelectItem value="9mobile">9Mobile</SelectItem>
-                  <SelectItem value="glo">Glo</SelectItem>
+                  <SelectItem value="all">{t('filters.allMnos', { ns: 'dashboard' })}</SelectItem>
+                  <SelectItem value="airtel">{t('mnos.airtel')}</SelectItem>
+                  <SelectItem value="mtn">{t('mnos.mtn')}</SelectItem>
+                  <SelectItem value="9mobile">{t('mnos.9mobile')}</SelectItem>
+                  <SelectItem value="glo">{t('mnos.glo')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             
             <div>
-              <label className="text-sm font-medium mb-2 block">Service Type</label>
+              <label className="text-sm font-medium mb-2 block">{t('filters.serviceType', { ns: 'dashboard' })}</label>
               <Select defaultValue="all">
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Services</SelectItem>
-                  <SelectItem value="airtime">Airtime</SelectItem>
-                  <SelectItem value="data">Data</SelectItem>
-                  <SelectItem value="bill">Bill Payment</SelectItem>
+                  <SelectItem value="all">{t('filters.allServices', { ns: 'dashboard' })}</SelectItem>
+                  <SelectItem value="airtime">{t('services.airtime')}</SelectItem>
+                  <SelectItem value="data">{t('services.data')}</SelectItem>
+                  <SelectItem value="bill">{t('services.billPayment')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -151,7 +154,7 @@ export function SessionReport() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Total Sessions</p>
+                <p className="text-sm text-muted-foreground">{t('metrics.totalSessions')}</p>
                 <p className="text-3xl font-bold">24,567</p>
               </div>
               <Users className="h-8 w-8 text-primary" />
@@ -163,7 +166,7 @@ export function SessionReport() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Conversion Rate</p>
+                <p className="text-sm text-muted-foreground">{t('metrics.conversionRate')}</p>
                 <p className="text-3xl font-bold">78.5%</p>
               </div>
               <TrendingUp className="h-8 w-8 text-status-active" />
@@ -175,7 +178,7 @@ export function SessionReport() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Drop Rate</p>
+                <p className="text-sm text-muted-foreground">{t('metrics.dropRate')}</p>
                 <p className="text-3xl font-bold">12.3%</p>
               </div>
               <AlertTriangle className="h-8 w-8 text-status-failed" />
@@ -187,7 +190,7 @@ export function SessionReport() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Avg Session Cost</p>
+                <p className="text-sm text-muted-foreground">{t('metrics.avgSessionCost')}</p>
                 <p className="text-3xl font-bold">$0.23</p>
               </div>
               <DollarSign className="h-8 w-8 text-primary" />

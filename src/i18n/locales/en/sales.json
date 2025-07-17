@@ -1,0 +1,47 @@
+{
+  "module": {
+    "title": "Sales Agent Module",
+    "subtitle": "Performance indicators and transaction-volume-based rewards for sales agents"
+  },
+  "filters": {
+    "title": "Filters & Time Period",
+    "timePeriod": "Time Period",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "quarterly": "Quarterly",
+    "yearly": "Yearly",
+    "customDateRange": "Custom Date Range",
+    "region": "Region",
+    "allRegions": "All Regions",
+    "agentStatus": "Agent Status",
+    "allStatus": "All Status",
+    "userType": "User Type",
+    "allTypes": "All Types",
+    "citizens": "Citizens",
+    "merchants": "Merchants",
+    "otherAgents": "Other Agents"
+  },
+  "metrics": {
+    "totalAgents": "Total Agents",
+    "totalRevenue": "Total Revenue",
+    "totalCommissions": "Total Commissions",
+    "activeUsers": "Active Users"
+  },
+  "tabs": {
+    "agentManagement": "Agent Management",
+    "performanceTable": "Performance Table",
+    "advancedReports": "Advanced Reports",
+    "commissions": "Commissions",
+    "charts": "Charts",
+    "performanceMgmt": "Performance Mgmt",
+    "analytics": "Analytics"
+  },
+  "cities": {
+    "goma": "Goma",
+    "kinshasa": "Kinshasa",
+    "bukavu": "Bukavu",
+    "urbanZones": "Urban Zones",
+    "ruralZones": "Rural Zones"
+  }
+}

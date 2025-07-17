@@ -1,0 +1,63 @@
+{
+  "buttons": {
+    "save": "Enregistrer",
+    "cancel": "Annuler", 
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "view": "Voir",
+    "export": "Exporter",
+    "import": "Importer",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "download": "Télécharger",
+    "upload": "Téléverser",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "submit": "Soumettre",
+    "reset": "Réinitialiser",
+    "add": "Ajouter",
+    "remove": "Supprimer",
+    "close": "Fermer",
+    "open": "Ouvrir"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "dashboard": "Tableau de bord",
+    "reports": "Rapports",
+    "agents": "Agents",
+    "configuration": "Configuration",
+    "settings": "Paramètres"
+  },
+  "status": {
+    "active": "Actif",
+    "inactive": "Inactif",
+    "pending": "En attente",
+    "completed": "Terminé",
+    "failed": "Échoué",
+    "suspended": "Suspendu",
+    "enabled": "Activé",
+    "disabled": "Désactivé"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "warning": "Avertissement",
+    "info": "Information",
+    "yes": "Oui",
+    "no": "Non",
+    "total": "Total",
+    "all": "Tout",
+    "none": "Aucun",
+    "select": "Sélectionner",
+    "date": "Date",
+    "time": "Heure",
+    "name": "Nom",
+    "type": "Type",
+    "description": "Description",
+    "amount": "Montant",
+    "currency": "Devise",
+    "language": "Langue"
+  }
+}

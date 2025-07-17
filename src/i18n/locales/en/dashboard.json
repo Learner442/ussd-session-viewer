@@ -1,0 +1,40 @@
+{
+  "title": "DAPAY Dashboard",
+  "subtitle": "Digital Payment Management Platform",
+  "status": {
+    "live": "Live"
+  },
+  "menu": {
+    "home": "Home",
+    "reports": "Reports",
+    "agents": "Agents", 
+    "configuration": "Configuration",
+    "ussdSessions": "USSD Sessions",
+    "sms": "SMS",
+    "costAnalysis": "Cost Analysis",
+    "userMetrics": "User Metrics",
+    "transactions": "Transactions",
+    "agentManagement": "Agent Management",
+    "salesAgentModule": "Sales Agent Module",
+    "ratesConfiguration": "Rates Configuration",
+    "fxConfiguration": "FX Configuration"
+  },
+  "filters": {
+    "title": "Filter Options",
+    "mno": "MNO",
+    "allMnos": "All MNOs",
+    "serviceType": "Service Type",
+    "allServices": "All Services",
+    "timePeriod": "Time Period",
+    "daily": "Daily",
+    "weekly": "Weekly", 
+    "monthly": "Monthly",
+    "region": "Region",
+    "allRegions": "All Regions",
+    "volume": "Volume",
+    "allSessions": "All Sessions",
+    "highVolume": "High Volume",
+    "mediumVolume": "Medium Volume",
+    "lowVolume": "Low Volume"
+  }
+}

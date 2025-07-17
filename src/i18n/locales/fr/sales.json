@@ -1,0 +1,47 @@
+{
+  "module": {
+    "title": "Module agent de vente",
+    "subtitle": "Indicateurs de performance et récompenses basées sur le volume de transactions pour les agents de vente"
+  },
+  "filters": {
+    "title": "Filtres et période",
+    "timePeriod": "Période",
+    "daily": "Quotidien",
+    "weekly": "Hebdomadaire",
+    "monthly": "Mensuel",
+    "quarterly": "Trimestriel",
+    "yearly": "Annuel",
+    "customDateRange": "Plage de dates personnalisée",
+    "region": "Région",
+    "allRegions": "Toutes les régions",
+    "agentStatus": "Statut de l'agent",
+    "allStatus": "Tous les statuts",
+    "userType": "Type d'utilisateur",
+    "allTypes": "Tous les types",
+    "citizens": "Citoyens",
+    "merchants": "Marchands",
+    "otherAgents": "Autres agents"
+  },
+  "metrics": {
+    "totalAgents": "Total des agents",
+    "totalRevenue": "Chiffre d'affaires total",
+    "totalCommissions": "Commissions totales",
+    "activeUsers": "Utilisateurs actifs"
+  },
+  "tabs": {
+    "agentManagement": "Gestion des agents",
+    "performanceTable": "Tableau de performance",
+    "advancedReports": "Rapports avancés",
+    "commissions": "Commissions",
+    "charts": "Graphiques",
+    "performanceMgmt": "Gestion de performance",
+    "analytics": "Analyses"
+  },
+  "cities": {
+    "goma": "Goma",
+    "kinshasa": "Kinshasa",
+    "bukavu": "Bukavu",
+    "urbanZones": "Zones urbaines",
+    "ruralZones": "Zones rurales"
+  }
+}

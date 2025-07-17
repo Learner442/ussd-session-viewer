@@ -1,0 +1,45 @@
+{
+  "management": {
+    "title": "Gestion des agents",
+    "subtitle": "Enregistrer, surveiller et gérer les agents de terrain dans toutes les régions",
+    "registerNewAgent": "Enregistrer un nouvel agent",
+    "agentMonitoring": "Surveillance des agents",
+    "exportReports": "Exporter les rapports"
+  },
+  "stats": {
+    "totalAgents": "Total des agents",
+    "activeToday": "Actifs aujourd'hui",
+    "totalVolume": "Volume total",
+    "alerts": "Alertes",
+    "fromLastMonth": "par rapport au mois dernier"
+  },
+  "quickActions": {
+    "title": "Actions rapides",
+    "subtitle": "Gérer efficacement les opérations des agents",
+    "recentActivity": "Activité récente",
+    "alerts": "Alertes",
+    "topPerformers": "Meilleurs performeurs"
+  },
+  "profile": {
+    "agentId": "ID Agent",
+    "agentName": "Nom de l'agent",
+    "region": "Région",
+    "status": "Statut",
+    "commission": "Commission",
+    "sales": "Ventes"
+  },
+  "registration": {
+    "title": "Enregistrer un nouvel agent",
+    "personalInfo": "Informations personnelles",
+    "businessInfo": "Informations commerciales",
+    "accountSetup": "Configuration du compte",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "phoneNumber": "Numéro de téléphone",
+    "email": "E-mail",
+    "address": "Adresse",
+    "businessName": "Nom de l'entreprise",
+    "businessType": "Type d'entreprise",
+    "businessAddress": "Adresse de l'entreprise"
+  }
+}

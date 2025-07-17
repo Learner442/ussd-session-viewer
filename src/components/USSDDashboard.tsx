@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Home, BarChart3, MessageSquare, DollarSign, Users, ChevronDown, ChevronRight, CreditCard, Settings, DollarSign as FXIcon, UserCheck, TrendingUp } from "lucide-react";
 import dapayLogo from "@/assets/dapay-logo.png";
 import {
@@ -24,33 +25,36 @@ import { RatesConfiguration } from "./RatesConfiguration";
 import { FXConfiguration } from "./FXConfiguration";
 import { AgentManagement } from "./AgentManagement";
 import { SalesAgentModule } from "./SalesAgentModule";
-
-const homeItems = [
-  { title: "Dashboard", url: "home", icon: Home },
-];
-
-const reportItems = [
-  { title: "USSD Sessions", url: "sessions", icon: BarChart3 },
-  { title: "SMS", url: "sms", icon: MessageSquare },
-  { title: "Cost Analysis", url: "analytics", icon: DollarSign },
-  { title: "User Metrics", url: "users", icon: Users },
-  { title: "Transactions", url: "transactions", icon: CreditCard },
-];
-
-const agentItems = [
-  { title: "Agent Management", url: "agent-management", icon: UserCheck },
-  { title: "Sales Agent Module", url: "sales-agent-module", icon: TrendingUp },
-];
-
-const configItems = [
-  { title: "Rates Configuration", url: "rates-configuration", icon: Settings },
-  { title: "FX Configuration", url: "fx-configuration", icon: FXIcon },
-];
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveTab: (tab: string) => void }) {
+  const { t } = useTranslation('dashboard');
   const [reportsOpen, setReportsOpen] = useState(true);
   const [agentsOpen, setAgentsOpen] = useState(true);
   const [configOpen, setConfigOpen] = useState(true);
+
+  const homeItems = [
+    { title: t('menu.home'), url: "home", icon: Home },
+  ];
+
+  const reportItems = [
+    { title: t('menu.ussdSessions'), url: "sessions", icon: BarChart3 },
+    { title: t('menu.sms'), url: "sms", icon: MessageSquare },
+    { title: t('menu.costAnalysis'), url: "analytics", icon: DollarSign },
+    { title: t('menu.userMetrics'), url: "users", icon: Users },
+    { title: t('menu.transactions'), url: "transactions", icon: CreditCard },
+  ];
+
+  const agentItems = [
+    { title: t('menu.agentManagement'), url: "agent-management", icon: UserCheck },
+    { title: t('menu.salesAgentModule'), url: "sales-agent-module", icon: TrendingUp },
+  ];
+
+  const configItems = [
+    { title: t('menu.ratesConfiguration'), url: "rates-configuration", icon: Settings },
+    { title: t('menu.fxConfiguration'), url: "fx-configuration", icon: FXIcon },
+  ];
+
 
   return (
     <Sidebar className="w-64">
@@ -60,7 +64,7 @@ function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveT
           <img src={dapayLogo} alt="DAPAY" className="h-16 w-auto" />
         </div>
         <SidebarGroup>
-          <SidebarGroupLabel>Home</SidebarGroupLabel>
+          <SidebarGroupLabel>{t('navigation.home', { ns: 'common' })}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {homeItems.map((item) => (
@@ -82,7 +86,7 @@ function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveT
           <Collapsible open={reportsOpen} onOpenChange={setReportsOpen}>
             <CollapsibleTrigger asChild>
               <SidebarGroupLabel className="cursor-pointer flex items-center justify-between hover:bg-muted/50 rounded-md">
-                <span>Reports</span>
+                <span>{t('navigation.reports', { ns: 'common' })}</span>
                 {reportsOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
               </SidebarGroupLabel>
             </CollapsibleTrigger>
@@ -110,7 +114,7 @@ function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveT
           <Collapsible open={agentsOpen} onOpenChange={setAgentsOpen}>
             <CollapsibleTrigger asChild>
               <SidebarGroupLabel className="cursor-pointer flex items-center justify-between hover:bg-muted/50 rounded-md">
-                <span>Agents</span>
+                <span>{t('navigation.agents', { ns: 'common' })}</span>
                 {agentsOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
               </SidebarGroupLabel>
             </CollapsibleTrigger>
@@ -138,7 +142,7 @@ function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveT
           <Collapsible open={configOpen} onOpenChange={setConfigOpen}>
             <CollapsibleTrigger asChild>
               <SidebarGroupLabel className="cursor-pointer flex items-center justify-between hover:bg-muted/50 rounded-md">
-                <span>Configuration</span>
+                <span>{t('navigation.configuration', { ns: 'common' })}</span>
                 {configOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
               </SidebarGroupLabel>
             </CollapsibleTrigger>
@@ -167,6 +171,7 @@ function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveT
 }
 
 export function USSDDashboard() {
+  const { t } = useTranslation('dashboard');
   const [activeTab, setActiveTab] = useState("home");
 
   const renderContent = () => {
@@ -207,16 +212,19 @@ export function USSDDashboard() {
             <div className="flex items-center space-x-4">
               <SidebarTrigger />
               <div>
-                <h1 className="text-2xl font-bold text-foreground">DAPAY Dashboard</h1>
+                <h1 className="text-2xl font-bold text-foreground">{t('title')}</h1>
                 <p className="text-sm text-muted-foreground">
-                  Digital Payment Management Platform
+                  {t('subtitle')}
                 </p>
               </div>
             </div>
             
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-status-active rounded-full animate-pulse"></div>
-              <span className="text-sm text-muted-foreground">Live</span>
+            <div className="flex items-center space-x-4">
+              <LanguageSwitcher />
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-status-active rounded-full animate-pulse"></div>
+                <span className="text-sm text-muted-foreground">{t('status.live')}</span>
+              </div>
             </div>
           </header>
 

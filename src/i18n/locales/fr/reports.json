@@ -1,0 +1,54 @@
+{
+  "sessionReport": {
+    "title": "Rapport de session",
+    "export": "Exporter",
+    "filters": "Filtres"
+  },
+  "metrics": {
+    "totalSessions": "Total des sessions",
+    "conversionRate": "Taux de conversion",
+    "dropRate": "Taux d'abandon",
+    "avgSessionCost": "Coût moyen par session"
+  },
+  "charts": {
+    "sessionsByMno": "Sessions par MNO",
+    "serviceDistribution": "Répartition des services",
+    "sessionTrends": "Tendances des sessions",
+    "completionRate": "Taux de finalisation",
+    "hourlySessionVolume": "Tendances du volume de sessions par heure",
+    "dailyCompletionVsDrop": "Taux de finalisation vs abandon quotidien"
+  },
+  "services": {
+    "airtime": "Crédit téléphonique",
+    "data": "Données",
+    "billPayment": "Paiement de factures",
+    "transfer": "Transfert",
+    "other": "Autre"
+  },
+  "mnos": {
+    "airtel": "Airtel",
+    "mtn": "MTN",
+    "9mobile": "9Mobile",
+    "glo": "Glo"
+  },
+  "performance": {
+    "topServicesByCompletion": "Meilleurs services par taux de finalisation",
+    "service": "SERVICE",
+    "totalSessions": "TOTAL SESSIONS",
+    "completed": "TERMINÉES",
+    "completionRate": "TAUX DE FINALISATION",
+    "revenue": "REVENUS"
+  },
+  "regional": {
+    "title": "Performance régionale",
+    "successRate": "Taux de succès :"
+  },
+  "export": {
+    "title": "Options d'export",
+    "pdf": "PDF",
+    "excel": "Excel",
+    "csv": "CSV",
+    "emailSummary": "Résumé par e-mail",
+    "dashboardExport": "Export du tableau de bord"
+  }
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -33,6 +34,7 @@ interface FilterState {
 }
 
 export const SalesAgentModule = () => {
+  const { t } = useTranslation('sales');
   const { toast } = useToast();
   const [metrics, setMetrics] = useState<SalesMetrics>({
     totalAgents: 0,
@@ -124,19 +126,19 @@ export const SalesAgentModule = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Sales Agent Module</h1>
+          <h1 className="text-3xl font-bold text-foreground">{t('module.title')}</h1>
           <p className="text-muted-foreground mt-1">
-            Performance indicators and transaction-volume-based rewards for sales agents
+            {t('module.subtitle')}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={handleExportReport}>
             <Download className="h-4 w-4 mr-2" />
-            Export Report
+            {t('buttons.export', { ns: 'common' })}
           </Button>
           <Button variant="outline">
             <Filter className="h-4 w-4 mr-2" />
-            Advanced Filters
+            {t('buttons.filter', { ns: 'common' })}
           </Button>
         </div>
       </div>
@@ -144,43 +146,43 @@ export const SalesAgentModule = () => {
       {/* Filters */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Filter className="h-5 w-5" />
-            Filters & Time Period
-          </CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <Filter className="h-5 w-5" />
+              {t('filters.title')}
+            </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <label className="text-sm font-medium mb-2 block">Time Period</label>
+              <label className="text-sm font-medium mb-2 block">{t('filters.timePeriod')}</label>
               <Select value={filters.timePeriod} onValueChange={(value) => updateFilter('timePeriod', value)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="daily">Daily</SelectItem>
-                  <SelectItem value="weekly">Weekly</SelectItem>
-                  <SelectItem value="monthly">Monthly</SelectItem>
-                  <SelectItem value="quarterly">Quarterly</SelectItem>
-                  <SelectItem value="yearly">Yearly</SelectItem>
-                  <SelectItem value="custom">Custom Date Range</SelectItem>
+                  <SelectItem value="daily">{t('filters.daily')}</SelectItem>
+                  <SelectItem value="weekly">{t('filters.weekly')}</SelectItem>
+                  <SelectItem value="monthly">{t('filters.monthly')}</SelectItem>
+                  <SelectItem value="quarterly">{t('filters.quarterly')}</SelectItem>
+                  <SelectItem value="yearly">{t('filters.yearly')}</SelectItem>
+                  <SelectItem value="custom">{t('filters.customDateRange')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div>
-              <label className="text-sm font-medium mb-2 block">Region</label>
+              <label className="text-sm font-medium mb-2 block">{t('filters.region')}</label>
               <Select value={filters.region} onValueChange={(value) => updateFilter('region', value)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Regions</SelectItem>
-                  <SelectItem value="goma">Goma</SelectItem>
-                  <SelectItem value="kinshasa">Kinshasa</SelectItem>
-                  <SelectItem value="bukavu">Bukavu</SelectItem>
-                  <SelectItem value="urban">Urban Zones</SelectItem>
-                  <SelectItem value="rural">Rural Zones</SelectItem>
+                  <SelectItem value="all">{t('filters.allRegions')}</SelectItem>
+                  <SelectItem value="goma">{t('cities.goma')}</SelectItem>
+                  <SelectItem value="kinshasa">{t('cities.kinshasa')}</SelectItem>
+                  <SelectItem value="bukavu">{t('cities.bukavu')}</SelectItem>
+                  <SelectItem value="urban">{t('cities.urbanZones')}</SelectItem>
+                  <SelectItem value="rural">{t('cities.ruralZones')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -224,7 +226,7 @@ export const SalesAgentModule = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Agents</p>
+                <p className="text-sm font-medium text-muted-foreground">{t('metrics.totalAgents')}</p>
                 <p className="text-2xl font-bold text-foreground">
                   {loading ? "..." : metrics.totalAgents}
                 </p>
@@ -238,7 +240,7 @@ export const SalesAgentModule = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Revenue</p>
+                <p className="text-sm font-medium text-muted-foreground">{t('metrics.totalRevenue')}</p>
                 <p className="text-2xl font-bold text-foreground">
                   {loading ? "..." : `$${metrics.totalRevenue.toFixed(2)}`}
                 </p>
@@ -252,7 +254,7 @@ export const SalesAgentModule = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Commissions</p>
+                <p className="text-sm font-medium text-muted-foreground">{t('metrics.totalCommissions')}</p>
                 <p className="text-2xl font-bold text-foreground">
                   {loading ? "..." : `$${metrics.totalCommissions.toFixed(2)}`}
                 </p>
@@ -266,7 +268,7 @@ export const SalesAgentModule = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Active Users</p>
+                <p className="text-sm font-medium text-muted-foreground">{t('metrics.activeUsers')}</p>
                 <p className="text-2xl font-bold text-foreground">
                   {loading ? "..." : metrics.activeUsers}
                 </p>
@@ -280,13 +282,13 @@ export const SalesAgentModule = () => {
       {/* Main Content Tabs */}
       <Tabs defaultValue="management" className="space-y-6">
         <TabsList className="grid w-full grid-cols-7">
-          <TabsTrigger value="management">Agent Management</TabsTrigger>
-          <TabsTrigger value="performance">Performance Table</TabsTrigger>
-          <TabsTrigger value="reporting">Advanced Reports</TabsTrigger>
-          <TabsTrigger value="commissions">Commissions</TabsTrigger>
-          <TabsTrigger value="charts">Charts</TabsTrigger>
-          <TabsTrigger value="performance-mgmt">Performance Mgmt</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="management">{t('tabs.agentManagement')}</TabsTrigger>
+          <TabsTrigger value="performance">{t('tabs.performanceTable')}</TabsTrigger>
+          <TabsTrigger value="reporting">{t('tabs.advancedReports')}</TabsTrigger>
+          <TabsTrigger value="commissions">{t('tabs.commissions')}</TabsTrigger>
+          <TabsTrigger value="charts">{t('tabs.charts')}</TabsTrigger>
+          <TabsTrigger value="performance-mgmt">{t('tabs.performanceMgmt')}</TabsTrigger>
+          <TabsTrigger value="analytics">{t('tabs.analytics')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="management">

@@ -572,6 +572,47 @@ export type Database = {
         }
         Relationships: []
       }
+      sales_agent_wallets: {
+        Row: {
+          balance: number | null
+          commission_balance: number | null
+          created_at: string
+          id: string
+          last_transaction_at: string | null
+          sales_agent_id: string
+          total_earnings: number | null
+          updated_at: string
+        }
+        Insert: {
+          balance?: number | null
+          commission_balance?: number | null
+          created_at?: string
+          id?: string
+          last_transaction_at?: string | null
+          sales_agent_id: string
+          total_earnings?: number | null
+          updated_at?: string
+        }
+        Update: {
+          balance?: number | null
+          commission_balance?: number | null
+          created_at?: string
+          id?: string
+          last_transaction_at?: string | null
+          sales_agent_id?: string
+          total_earnings?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_agent_wallets_sales_agent_id_fkey"
+            columns: ["sales_agent_id"]
+            isOneToOne: true
+            referencedRelation: "sales_agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sales_agents: {
         Row: {
           agent_name: string

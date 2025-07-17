@@ -122,7 +122,7 @@ export const SalesAgentModule = () => {
         <div>
           <h1 className="text-3xl font-bold text-foreground">Sales Agent Module</h1>
           <p className="text-muted-foreground mt-1">
-            Performance indicators and analytics for sales agents
+            Performance indicators and transaction-volume-based rewards for sales agents
           </p>
         </div>
         <div className="flex gap-2">

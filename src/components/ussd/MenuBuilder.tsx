@@ -136,7 +136,7 @@ export function MenuBuilder({ selectedFlowId }: MenuBuilderProps) {
         ...stepFormData,
         flow_id: selectedFlowId,
         step_number: editingStep ? editingStep.step_number : steps.length + 1,
-        parent_step_id: stepFormData.parent_step_id || null,
+        parent_step_id: stepFormData.parent_step_id === "none" ? null : stepFormData.parent_step_id || null,
         api_endpoint: stepFormData.api_endpoint || null,
         fallback_message: stepFormData.fallback_message || null
       };
@@ -187,7 +187,7 @@ export function MenuBuilder({ selectedFlowId }: MenuBuilderProps) {
       const optionData = {
         ...optionFormData,
         step_id: selectedStepId,
-        next_step_id: optionFormData.next_step_id || null,
+        next_step_id: optionFormData.next_step_id === "end" ? null : optionFormData.next_step_id || null,
         option_value: optionFormData.option_value || null
       };
 
@@ -261,7 +261,7 @@ export function MenuBuilder({ selectedFlowId }: MenuBuilderProps) {
       timeout_seconds: step.timeout_seconds,
       fallback_message: step.fallback_message || "",
       is_initial_step: step.is_initial_step,
-      parent_step_id: step.parent_step_id || "",
+      parent_step_id: step.parent_step_id || "none",
       api_endpoint: step.api_endpoint || ""
     });
     setIsStepDialogOpen(true);
@@ -274,7 +274,7 @@ export function MenuBuilder({ selectedFlowId }: MenuBuilderProps) {
       option_number: option.option_number,
       option_text: option.option_text,
       option_value: option.option_value || "",
-      next_step_id: option.next_step_id || "",
+      next_step_id: option.next_step_id || "end",
       is_active: option.is_active
     });
     setIsOptionDialogOpen(true);
@@ -441,7 +441,7 @@ export function MenuBuilder({ selectedFlowId }: MenuBuilderProps) {
                       <SelectValue placeholder="Select parent step" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">None (Root Step)</SelectItem>
+                      <SelectItem value="none">None (Root Step)</SelectItem>
                       {steps.map((step) => (
                         <SelectItem key={step.id} value={step.id}>
                           {step.step_name}
@@ -703,7 +703,7 @@ export function MenuBuilder({ selectedFlowId }: MenuBuilderProps) {
                   <SelectValue placeholder="Select next step" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">End Session</SelectItem>
+                  <SelectItem value="end">End Session</SelectItem>
                   {steps.map((step) => (
                     <SelectItem key={step.id} value={step.id}>
                       {step.step_name}

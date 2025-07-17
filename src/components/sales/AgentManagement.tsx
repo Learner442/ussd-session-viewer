@@ -171,7 +171,7 @@ export const AgentManagement = () => {
           phone_number: newAgentForm.phone_number,
           region: newAgentForm.region,
           supervisor: '', // Temporary for compatibility
-          sales_agent_id: newAgentForm.sales_agent_id || null,
+          sales_agent_id: newAgentForm.sales_agent_id === "none" ? null : newAgentForm.sales_agent_id || null,
           initial_topup: newAgentForm.initial_topup,
           status: 'pending' as const
         });
@@ -412,7 +412,7 @@ export const AgentManagement = () => {
                         <SelectValue placeholder="Select sales agent" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">No Supervisor</SelectItem>
+                        <SelectItem value="none">No Supervisor</SelectItem>
                         {salesAgents.map((salesAgent) => (
                           <SelectItem key={salesAgent.id} value={salesAgent.id}>
                             {salesAgent.agent_name} ({salesAgent.sales_agent_id})

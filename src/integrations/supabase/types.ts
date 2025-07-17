@@ -345,6 +345,7 @@ export type Database = {
           initial_topup: number | null
           phone_number: string
           region: string
+          sales_agent_id: string | null
           status: Database["public"]["Enums"]["agent_status"] | null
           supervisor: string
           updated_at: string
@@ -359,6 +360,7 @@ export type Database = {
           initial_topup?: number | null
           phone_number: string
           region: string
+          sales_agent_id?: string | null
           status?: Database["public"]["Enums"]["agent_status"] | null
           supervisor: string
           updated_at?: string
@@ -373,11 +375,20 @@ export type Database = {
           initial_topup?: number | null
           phone_number?: string
           region?: string
+          sales_agent_id?: string | null
           status?: Database["public"]["Enums"]["agent_status"] | null
           supervisor?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_agents_sales_agent"
+            columns: ["sales_agent_id"]
+            isOneToOne: false
+            referencedRelation: "sales_agents"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       commission_rules: {
         Row: {

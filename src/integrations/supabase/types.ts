@@ -561,6 +561,60 @@ export type Database = {
         }
         Relationships: []
       }
+      sales_agents: {
+        Row: {
+          agent_name: string
+          commission_rate: number | null
+          created_at: string
+          created_by: string | null
+          department: string | null
+          email: string | null
+          id: string
+          initial_budget: number | null
+          phone_number: string
+          region: string
+          role: string | null
+          sales_agent_id: string
+          status: Database["public"]["Enums"]["agent_status"] | null
+          target_quota: number | null
+          updated_at: string
+        }
+        Insert: {
+          agent_name: string
+          commission_rate?: number | null
+          created_at?: string
+          created_by?: string | null
+          department?: string | null
+          email?: string | null
+          id?: string
+          initial_budget?: number | null
+          phone_number: string
+          region: string
+          role?: string | null
+          sales_agent_id: string
+          status?: Database["public"]["Enums"]["agent_status"] | null
+          target_quota?: number | null
+          updated_at?: string
+        }
+        Update: {
+          agent_name?: string
+          commission_rate?: number | null
+          created_at?: string
+          created_by?: string | null
+          department?: string | null
+          email?: string | null
+          id?: string
+          initial_budget?: number | null
+          phone_number?: string
+          region?: string
+          role?: string | null
+          sales_agent_id?: string
+          status?: Database["public"]["Enums"]["agent_status"] | null
+          target_quota?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       service_rates: {
         Row: {
           created_at: string
@@ -883,6 +937,10 @@ export type Database = {
     }
     Functions: {
       generate_agent_id: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      generate_sales_agent_id: {
         Args: Record<PropertyKey, never>
         Returns: string
       }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, BarChart3, MessageSquare, DollarSign, Users, ChevronDown, ChevronRight, CreditCard, Settings, DollarSign as FXIcon, UserCheck } from "lucide-react";
+import { Home, BarChart3, MessageSquare, DollarSign, Users, ChevronDown, ChevronRight, CreditCard, Settings, DollarSign as FXIcon, UserCheck, TrendingUp } from "lucide-react";
 import dapayLogo from "@/assets/dapay-logo.png";
 import {
   Sidebar,
@@ -23,6 +23,7 @@ import { Transactions } from "./Transactions";
 import { RatesConfiguration } from "./RatesConfiguration";
 import { FXConfiguration } from "./FXConfiguration";
 import { AgentManagement } from "./AgentManagement";
+import { SalesAgentModule } from "./SalesAgentModule";
 
 const homeItems = [
   { title: "Dashboard", url: "home", icon: Home },
@@ -38,6 +39,7 @@ const reportItems = [
 
 const agentItems = [
   { title: "Agent Management", url: "agent-management", icon: UserCheck },
+  { title: "Sales Agent Module", url: "sales-agent-module", icon: TrendingUp },
 ];
 
 const configItems = [
@@ -183,6 +185,8 @@ export function USSDDashboard() {
         return <Transactions />;
       case "agent-management":
         return <AgentManagement />;
+      case "sales-agent-module":
+        return <SalesAgentModule />;
       case "rates-configuration":
         return <RatesConfiguration />;
       case "fx-configuration":

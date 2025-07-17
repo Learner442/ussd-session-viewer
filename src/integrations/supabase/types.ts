@@ -14,6 +14,115 @@ export type Database = {
   }
   public: {
     Tables: {
+      agent_commissions: {
+        Row: {
+          active_users_commission: number | null
+          active_users_count: number | null
+          agent_id: string
+          calculation_period_end: string
+          calculation_period_start: string
+          completed_sessions_count: number | null
+          created_at: string
+          id: string
+          is_paid: boolean | null
+          paid_date: string | null
+          sessions_commission: number | null
+          sms_commission: number | null
+          sms_count: number | null
+          total_commission: number | null
+          transaction_bonuses_amount: number | null
+          transaction_bonuses_count: number | null
+          updated_at: string
+        }
+        Insert: {
+          active_users_commission?: number | null
+          active_users_count?: number | null
+          agent_id: string
+          calculation_period_end: string
+          calculation_period_start: string
+          completed_sessions_count?: number | null
+          created_at?: string
+          id?: string
+          is_paid?: boolean | null
+          paid_date?: string | null
+          sessions_commission?: number | null
+          sms_commission?: number | null
+          sms_count?: number | null
+          total_commission?: number | null
+          transaction_bonuses_amount?: number | null
+          transaction_bonuses_count?: number | null
+          updated_at?: string
+        }
+        Update: {
+          active_users_commission?: number | null
+          active_users_count?: number | null
+          agent_id?: string
+          calculation_period_end?: string
+          calculation_period_start?: string
+          completed_sessions_count?: number | null
+          created_at?: string
+          id?: string
+          is_paid?: boolean | null
+          paid_date?: string | null
+          sessions_commission?: number | null
+          sms_commission?: number | null
+          sms_count?: number | null
+          total_commission?: number | null
+          transaction_bonuses_amount?: number | null
+          transaction_bonuses_count?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_commissions_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agent_recruited_users: {
+        Row: {
+          agent_id: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          last_activity_date: string | null
+          registration_date: string
+          user_phone: string
+          user_type: string
+        }
+        Insert: {
+          agent_id: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          last_activity_date?: string | null
+          registration_date?: string
+          user_phone: string
+          user_type: string
+        }
+        Update: {
+          agent_id?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          last_activity_date?: string | null
+          registration_date?: string
+          user_phone?: string
+          user_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_recruited_users_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agent_services: {
         Row: {
           agent_id: string
@@ -48,6 +157,141 @@ export type Database = {
             columns: ["agent_id"]
             isOneToOne: false
             referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agent_user_sessions: {
+        Row: {
+          agent_id: string
+          created_at: string
+          id: string
+          is_completed: boolean | null
+          recruited_user_id: string
+          session_date: string
+          session_type: string
+        }
+        Insert: {
+          agent_id: string
+          created_at?: string
+          id?: string
+          is_completed?: boolean | null
+          recruited_user_id: string
+          session_date?: string
+          session_type: string
+        }
+        Update: {
+          agent_id?: string
+          created_at?: string
+          id?: string
+          is_completed?: boolean | null
+          recruited_user_id?: string
+          session_date?: string
+          session_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_user_sessions_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agent_user_sessions_recruited_user_id_fkey"
+            columns: ["recruited_user_id"]
+            isOneToOne: false
+            referencedRelation: "agent_recruited_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agent_user_sms: {
+        Row: {
+          agent_id: string
+          created_at: string
+          id: string
+          recruited_user_id: string
+          sms_count: number
+          sms_date: string
+        }
+        Insert: {
+          agent_id: string
+          created_at?: string
+          id?: string
+          recruited_user_id: string
+          sms_count?: number
+          sms_date?: string
+        }
+        Update: {
+          agent_id?: string
+          created_at?: string
+          id?: string
+          recruited_user_id?: string
+          sms_count?: number
+          sms_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_user_sms_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agent_user_sms_recruited_user_id_fkey"
+            columns: ["recruited_user_id"]
+            isOneToOne: false
+            referencedRelation: "agent_recruited_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agent_user_transactions: {
+        Row: {
+          agent_id: string
+          created_at: string
+          id: string
+          recruited_user_id: string
+          revenue_generated: number | null
+          transaction_amount: number
+          transaction_date: string
+          transaction_type: string
+        }
+        Insert: {
+          agent_id: string
+          created_at?: string
+          id?: string
+          recruited_user_id: string
+          revenue_generated?: number | null
+          transaction_amount: number
+          transaction_date?: string
+          transaction_type: string
+        }
+        Update: {
+          agent_id?: string
+          created_at?: string
+          id?: string
+          recruited_user_id?: string
+          revenue_generated?: number | null
+          transaction_amount?: number
+          transaction_date?: string
+          transaction_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_user_transactions_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agent_user_transactions_recruited_user_id_fkey"
+            columns: ["recruited_user_id"]
+            isOneToOne: false
+            referencedRelation: "agent_recruited_users"
             referencedColumns: ["id"]
           },
         ]
@@ -131,6 +375,42 @@ export type Database = {
           region?: string
           status?: Database["public"]["Enums"]["agent_status"] | null
           supervisor?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      commission_rules: {
+        Row: {
+          bonus_amount: number | null
+          bonus_threshold: number | null
+          created_at: string
+          id: string
+          is_active: boolean | null
+          rate: number
+          rule_name: string
+          rule_type: string
+          updated_at: string
+        }
+        Insert: {
+          bonus_amount?: number | null
+          bonus_threshold?: number | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          rate: number
+          rule_name: string
+          rule_type: string
+          updated_at?: string
+        }
+        Update: {
+          bonus_amount?: number | null
+          bonus_threshold?: number | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          rate?: number
+          rule_name?: string
+          rule_type?: string
           updated_at?: string
         }
         Relationships: []

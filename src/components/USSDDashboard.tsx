@@ -24,6 +24,8 @@ import { RatesConfiguration } from "./RatesConfiguration";
 import { FXConfiguration } from "./FXConfiguration";
 import { AgentManagement } from "./AgentManagement";
 import { SalesAgentModule } from "./SalesAgentModule";
+import { LanguageToggle } from "./LanguageSwitcher";
+import { useTranslation } from 'react-i18next';
 
 const homeItems = [
   { title: "Dashboard", url: "home", icon: Home },
@@ -167,6 +169,7 @@ function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveT
 }
 
 export function USSDDashboard() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("home");
 
   const renderContent = () => {
@@ -214,7 +217,8 @@ export function USSDDashboard() {
               </div>
             </div>
             
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-4">
+              <LanguageToggle />
               <div className="w-3 h-3 bg-status-active rounded-full animate-pulse"></div>
               <span className="text-sm text-muted-foreground">Live</span>
             </div>

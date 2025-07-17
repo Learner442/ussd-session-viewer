@@ -16,6 +16,8 @@ import { DateRange } from 'react-day-picker';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { ErrorBoundary } from './ErrorBoundary';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 interface SalesMetrics {
   totalAgents: number;
@@ -33,6 +35,7 @@ interface FilterState {
 }
 
 export const SalesAgentModule = () => {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [metrics, setMetrics] = useState<SalesMetrics>({
     totalAgents: 0,
@@ -124,19 +127,20 @@ export const SalesAgentModule = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Sales Agent Module</h1>
+          <h1 className="text-3xl font-bold text-foreground">{t('salesAgent.title')}</h1>
           <p className="text-muted-foreground mt-1">
-            Performance indicators and transaction-volume-based rewards for sales agents
+            {t('salesAgent.subtitle')}
           </p>
         </div>
         <div className="flex gap-2">
+          <LanguageSwitcher />
           <Button variant="outline" onClick={handleExportReport}>
             <Download className="h-4 w-4 mr-2" />
-            Export Report
+            {t('common.export')} {t('reporting.exportReport')}
           </Button>
           <Button variant="outline">
             <Filter className="h-4 w-4 mr-2" />
-            Advanced Filters
+            {t('salesAgent.filters.timePeriod')}
           </Button>
         </div>
       </div>
@@ -146,7 +150,7 @@ export const SalesAgentModule = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Filter className="h-5 w-5" />
-            Filters & Time Period
+            {t('salesAgent.filters.timePeriod')} & {t('salesAgent.filters.region')}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -224,9 +228,9 @@ export const SalesAgentModule = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Agents</p>
+                <p className="text-sm font-medium text-muted-foreground">{t('salesAgent.metrics.totalAgents')}</p>
                 <p className="text-2xl font-bold text-foreground">
-                  {loading ? "..." : metrics.totalAgents}
+                  {loading ? t('common.loading') : metrics.totalAgents}
                 </p>
               </div>
               <Users className="h-8 w-8 text-primary" />
@@ -238,9 +242,9 @@ export const SalesAgentModule = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Revenue</p>
+                <p className="text-sm font-medium text-muted-foreground">{t('salesAgent.metrics.totalRevenue')}</p>
                 <p className="text-2xl font-bold text-foreground">
-                  {loading ? "..." : `$${metrics.totalRevenue.toFixed(2)}`}
+                  {loading ? t('common.loading') : `$${metrics.totalRevenue.toFixed(2)}`}
                 </p>
               </div>
               <DollarSign className="h-8 w-8 text-green-600" />
@@ -252,9 +256,9 @@ export const SalesAgentModule = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Commissions</p>
+                <p className="text-sm font-medium text-muted-foreground">{t('salesAgent.metrics.totalCommissions')}</p>
                 <p className="text-2xl font-bold text-foreground">
-                  {loading ? "..." : `$${metrics.totalCommissions.toFixed(2)}`}
+                  {loading ? t('common.loading') : `$${metrics.totalCommissions.toFixed(2)}`}
                 </p>
               </div>
               <TrendingUp className="h-8 w-8 text-blue-600" />
@@ -266,9 +270,9 @@ export const SalesAgentModule = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Active Users</p>
+                <p className="text-sm font-medium text-muted-foreground">{t('salesAgent.metrics.activeUsers')}</p>
                 <p className="text-2xl font-bold text-foreground">
-                  {loading ? "..." : metrics.activeUsers}
+                  {loading ? t('common.loading') : metrics.activeUsers}
                 </p>
               </div>
               <Activity className="h-8 w-8 text-orange-600" />
@@ -280,13 +284,13 @@ export const SalesAgentModule = () => {
       {/* Main Content Tabs */}
       <Tabs defaultValue="management" className="space-y-6">
         <TabsList className="grid w-full grid-cols-7">
-          <TabsTrigger value="management">Agent Management</TabsTrigger>
-          <TabsTrigger value="performance">Performance Table</TabsTrigger>
-          <TabsTrigger value="reporting">Advanced Reports</TabsTrigger>
-          <TabsTrigger value="commissions">Commissions</TabsTrigger>
-          <TabsTrigger value="charts">Charts</TabsTrigger>
-          <TabsTrigger value="performance-mgmt">Performance Mgmt</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="management">{t('salesAgent.tabs.management')}</TabsTrigger>
+          <TabsTrigger value="performance">{t('salesAgent.tabs.performance')}</TabsTrigger>
+          <TabsTrigger value="reporting">{t('salesAgent.tabs.reporting')}</TabsTrigger>
+          <TabsTrigger value="commissions">{t('salesAgent.tabs.commissions')}</TabsTrigger>
+          <TabsTrigger value="charts">{t('salesAgent.tabs.charts')}</TabsTrigger>
+          <TabsTrigger value="performance-mgmt">{t('salesAgent.tabs.performanceManagement')}</TabsTrigger>
+          <TabsTrigger value="analytics">{t('salesAgent.tabs.analytics')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="management">

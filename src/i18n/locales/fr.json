@@ -1,0 +1,186 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "add": "Ajouter",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "export": "Exporter",
+    "download": "Télécharger",
+    "view": "Voir",
+    "status": "Statut",
+    "actions": "Actions",
+    "yes": "Oui",
+    "no": "Non",
+    "confirm": "Confirmer",
+    "success": "Succès",
+    "error": "Erreur",
+    "warning": "Avertissement",
+    "info": "Information"
+  },
+  "navigation": {
+    "dashboard": "Tableau de bord",
+    "agents": "Agents",
+    "reports": "Rapports",
+    "analytics": "Analytiques",
+    "settings": "Paramètres"
+  },
+  "salesAgent": {
+    "title": "Module Agent Commercial",
+    "subtitle": "Indicateurs de performance et récompenses basées sur le volume des transactions pour les agents commerciaux",
+    "tabs": {
+      "management": "Gestion des Agents",
+      "performance": "Tableau de Performance",
+      "reporting": "Rapports Avancés",
+      "commissions": "Commissions",
+      "charts": "Graphiques",
+      "performanceManagement": "Gestion Perf.",
+      "analytics": "Analytiques"
+    },
+    "metrics": {
+      "totalAgents": "Total des Agents",
+      "totalRevenue": "Chiffre d'Affaires Total",
+      "totalCommissions": "Commissions Totales",
+      "activeUsers": "Utilisateurs Actifs",
+      "conversionRate": "Taux de Conversion",
+      "averageDealSize": "Taille Moyenne des Transactions"
+    },
+    "filters": {
+      "timePeriod": "Période",
+      "region": "Région",
+      "agentStatus": "Statut Agent",
+      "userType": "Type d'Utilisateur",
+      "allRegions": "Toutes les Régions",
+      "allStatus": "Tous les Statuts",
+      "allTypes": "Tous les Types"
+    },
+    "periods": {
+      "daily": "Quotidien",
+      "weekly": "Hebdomadaire",
+      "monthly": "Mensuel",
+      "quarterly": "Trimestriel",
+      "yearly": "Annuel",
+      "custom": "Plage de Dates Personnalisée"
+    },
+    "regions": {
+      "goma": "Goma",
+      "kinshasa": "Kinshasa",
+      "bukavu": "Bukavu",
+      "urban": "Zones Urbaines",
+      "rural": "Zones Rurales"
+    },
+    "statuses": {
+      "active": "Actif",
+      "inactive": "Inactif",
+      "suspended": "Suspendu",
+      "pending": "En Attente"
+    },
+    "userTypes": {
+      "citizen": "Citoyens",
+      "merchant": "Commerçants",
+      "agent": "Autres Agents"
+    }
+  },
+  "agentManagement": {
+    "title": "Gestion des Agents Commerciaux",
+    "subtitle": "Ajouter, mettre à jour et gérer les agents commerciaux",
+    "addAgent": "Ajouter Nouvel Agent",
+    "editAgent": "Modifier les Informations de l'Agent",
+    "deactivateAgent": "Désactiver l'Agent",
+    "deactivateInactive": "Désactiver les Inactifs",
+    "agentDetails": {
+      "agentId": "ID Agent",
+      "name": "Nom de l'Agent",
+      "phoneNumber": "Numéro de Téléphone",
+      "region": "Région",
+      "territory": "Territoire",
+      "supervisor": "Superviseur",
+      "salesQuota": "Quota de Ventes",
+      "initialTopup": "Recharge Initiale",
+      "lastActivity": "Dernière Activité",
+      "seniority": "Ancienneté"
+    },
+    "seniority": {
+      "senior": "Senior (3+ mois)",
+      "junior": "Junior (<3 mois)",
+      "all": "Toute Ancienneté"
+    },
+    "messages": {
+      "agentAdded": "Agent ajouté avec succès",
+      "agentUpdated": "Agent mis à jour avec succès",
+      "agentDeactivated": "Agent désactivé",
+      "noInactiveAgents": "Aucun agent inactif trouvé",
+      "inactiveAgentsDeactivated": "agents ont été désactivés en raison d'inactivité",
+      "confirmDeactivate": "Êtes-vous sûr de vouloir désactiver",
+      "confirmBulkDeactivate": "Ceci désactivera tous les agents qui n'ont eu aucune activité dans les 3 derniers mois. Êtes-vous sûr de vouloir continuer ?"
+    }
+  },
+  "performance": {
+    "title": "Gestion de la Performance",
+    "subtitle": "Notation des agents, classements et amélioration de la performance",
+    "excellentPerformers": "Excellents Performeurs",
+    "goodPerformers": "Bons Performeurs",
+    "underperformers": "Sous-Performeurs",
+    "averageScore": "Score Moyen",
+    "performanceBands": {
+      "excellent": "Excellent",
+      "good": "Bon",
+      "average": "Moyen",
+      "belowAverage": "Sous la Moyenne",
+      "poor": "Faible"
+    },
+    "leaderboard": {
+      "title": "Classement du Trimestre Actuel",
+      "subtitle": "Agents les plus performants classés par score de performance global",
+      "rank": "Rang",
+      "totalPoints": "Points Totaux",
+      "performanceBadge": "Badge de Performance",
+      "achievements": "Réalisations"
+    },
+    "coaching": {
+      "title": "Agents Nécessitant un Accompagnement",
+      "subtitle": "Agents en dessous de 60% d'atteinte de quota ou 50% de taux de clôture avec suggestions d'accompagnement personnalisées",
+      "priority": "Priorité",
+      "quotaAchievement": "Atteinte du Quota",
+      "closeRate": "Taux de Clôture",
+      "coachingSuggestions": "Suggestions d'Accompagnement",
+      "sendReminder": "Envoyer Rappel",
+      "priorities": {
+        "high": "Priorité Haute",
+        "medium": "Priorité Moyenne",
+        "low": "Priorité Basse"
+      }
+    }
+  },
+  "reporting": {
+    "title": "Rapports Avancés",
+    "subtitle": "Rapports complets de performance des ventes et analytiques",
+    "monthlyReport": "Rapport de Performance Mensuel",
+    "topAgents": "Top 10 des Agents Performants",
+    "teamComparison": "Comparaison de Performance des Équipes",
+    "decliningPerformance": "Agents avec Performance en Déclin",
+    "keyMetrics": "Résumé des Métriques Clés",
+    "exportReport": "Exporter le Rapport"
+  },
+  "commissions": {
+    "title": "Règles de Commission Basées sur le Volume des Transactions",
+    "subtitle": "Règles de calcul de commission axées sur la récompense du volume de transactions généré par les utilisateurs recrutés",
+    "calculationPeriod": "Période de Calcul",
+    "currentMonth": "Mois Actuel",
+    "lastMonth": "Mois Dernier",
+    "currentQuarter": "Trimestre Actuel",
+    "lastQuarter": "Trimestre Dernier",
+    "recalculate": "Recalculer",
+    "calculating": "Calcul en cours...",
+    "commissionsCalculated": "Calculs de Commissions",
+    "commissionsSubtitle": "Commissions calculées basées sur les règles actuelles et la performance des agents"
+  },
+  "language": {
+    "english": "English",
+    "french": "Français",
+    "switchTo": "Passer à"
+  }
+}

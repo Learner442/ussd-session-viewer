@@ -96,6 +96,26 @@ export function MenuBuilder({ selectedFlowId }: MenuBuilderProps) {
     try {
       setLoading(true);
       
+      // First, verify the flow exists
+      const { data: flowData, error: flowError } = await supabase
+        .from('ussd_menu_flows')
+        .select('id, flow_name')
+        .eq('id', selectedFlowId)
+        .maybeSingle();
+
+      if (flowError) throw flowError;
+      
+      if (!flowData) {
+        toast({
+          title: "Error",
+          description: "Selected flow not found. Please select a valid flow.",
+          variant: "destructive",
+        });
+        setSteps([]);
+        setOptions([]);
+        return;
+      }
+      
       // Load steps
       const { data: stepsData, error: stepsError } = await supabase
         .from('ussd_menu_steps')
@@ -129,7 +149,14 @@ export function MenuBuilder({ selectedFlowId }: MenuBuilderProps) {
 
   const handleStepSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedFlowId) return;
+    if (!selectedFlowId) {
+      toast({
+        title: "Error",
+        description: "Please select a flow first",
+        variant: "destructive",
+      });
+      return;
+    }
 
     try {
       const stepData = {
@@ -181,7 +208,14 @@ export function MenuBuilder({ selectedFlowId }: MenuBuilderProps) {
 
   const handleOptionSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedStepId) return;
+    if (!selectedStepId) {
+      toast({
+        title: "Error",
+        description: "Please select a step first",
+        variant: "destructive",
+      });
+      return;
+    }
 
     try {
       const optionData = {

@@ -55,6 +55,7 @@ function AppSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveT
   const configItems = [
     { title: t('menu.ratesConfiguration'), url: "rates-configuration", icon: Settings },
     { title: t('menu.fxConfiguration'), url: "fx-configuration", icon: FXIcon },
+    { title: t('menu.ussdConfiguration'), url: "ussd-configuration", icon: Settings },
   ];
 
 
@@ -198,6 +199,8 @@ export function USSDDashboard() {
         return <RatesConfiguration />;
       case "fx-configuration":
         return <FXConfiguration />;
+      case "ussd-configuration":
+        return <USSDConfiguration />;
       default:
         return <SessionReport />;
     }

@@ -15,6 +15,7 @@ import { PerformanceManagement } from './sales/PerformanceManagement';
 import { DateRange } from 'react-day-picker';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { ErrorBoundary } from './ErrorBoundary';
 
 interface SalesMetrics {
   totalAgents: number;
@@ -289,31 +290,45 @@ export const SalesAgentModule = () => {
         </TabsList>
 
         <TabsContent value="management">
-          <AgentManagement />
+          <ErrorBoundary>
+            <AgentManagement />
+          </ErrorBoundary>
         </TabsContent>
 
         <TabsContent value="performance">
-          <AgentPerformanceTable filters={filters} />
+          <ErrorBoundary>
+            <AgentPerformanceTable filters={filters} />
+          </ErrorBoundary>
         </TabsContent>
 
         <TabsContent value="reporting">
-          <AdvancedReporting />
+          <ErrorBoundary>
+            <AdvancedReporting />
+          </ErrorBoundary>
         </TabsContent>
 
         <TabsContent value="commissions">
-          <CommissionCalculator />
+          <ErrorBoundary>
+            <CommissionCalculator />
+          </ErrorBoundary>
         </TabsContent>
 
         <TabsContent value="charts">
-          <PerformanceCharts filters={filters} />
+          <ErrorBoundary>
+            <PerformanceCharts filters={filters} />
+          </ErrorBoundary>
         </TabsContent>
 
         <TabsContent value="performance-mgmt">
-          <PerformanceManagement />
+          <ErrorBoundary>
+            <PerformanceManagement />
+          </ErrorBoundary>
         </TabsContent>
 
         <TabsContent value="analytics">
-          <AgentAnalytics filters={filters} />
+          <ErrorBoundary>
+            <AgentAnalytics filters={filters} />
+          </ErrorBoundary>
         </TabsContent>
       </Tabs>
     </div>
